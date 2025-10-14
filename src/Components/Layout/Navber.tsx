@@ -10,19 +10,21 @@ import {
   MoonIcon,
   ComputerDesktopIcon,
   BookOpenIcon,
-  TagIcon,
   UserGroupIcon,
   ClockIcon,
   UserPlusIcon,
-  GiftIcon,
   UsersIcon,
   CogIcon,
   HeartIcon,
-  AcademicCapIcon,
   BookmarkIcon,
   HandRaisedIcon,
-  CalendarDaysIcon,
+  IdentificationIcon,
+  DocumentCheckIcon,
+  BuildingOffice2Icon,
+  UserIcon,
+  GlobeAltIcon
 } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 
 type Theme = 'light' | 'dark' | 'system'
 
@@ -95,74 +97,92 @@ const Navber = () => {
   const dropdownItems = {
     about: [
       { 
-        name: 'Our Story', 
-        href: '/about/story', 
+        name: 'Our Activities', 
+        href: '/about', 
         icon: BookOpenIcon, 
-        description: 'Learn about our journey and values' 
+        description: 'View reports, photos, and stories from Gulshan Society\'s activities and initiatives.' 
       },
       { 
         name: 'Mission & Vision', 
         href: '/about/mission', 
-        icon: TagIcon, 
-        description: 'Our goals and aspirations' 
+        icon: GlobeAltIcon, 
+        description: 'Read about our guiding principles, objectives, and vision for the future.' 
       },
       { 
-        name: 'Leadership Team', 
-        href: '/about/leadership', 
+        name: "Previous EC's", 
+        href: '/about/previous-ec', 
         icon: UserGroupIcon, 
-        description: 'Meet our dedicated leaders' 
+        description: 'See the list of earlier Executive Committee members who led the society.' 
       },
       { 
         name: 'History', 
         href: '/about/history', 
         icon: ClockIcon, 
-        description: 'Explore our rich heritage' 
+        description: 'Explore our foundation, mileposts, and the legacy of the organization.' 
       }
     ],
     membership: [
       { 
-        name: 'Join Us', 
-        href: '/membership-form', 
-        icon: UserPlusIcon, 
-        description: 'Become part of our community' 
-      },
-      { 
-        name: 'Members Directory', 
-        href: '/membership/directory', 
+        name: 'Member List', 
+        href: '/member-list', 
         icon: UsersIcon, 
-        description: 'Connect with fellow members' 
+        description: 'View comprehensive list of all registered society members.' 
       },
       { 
-        name: 'Member Portal', 
-        href: '/membership/portal', 
+        name: 'Member Services', 
+        href: '/member-services', 
         icon: CogIcon, 
-        description: 'Manage your membership' 
+        description: 'Access various resources and privileges exclusive to members.' 
+      },
+      { 
+        name: 'Non-member Services', 
+        href: '/non-member-services', 
+        icon: UserIcon, 
+        description: 'Service information open for non-members and general community.' 
+      },
+      { 
+        name: 'Code of Conduct', 
+        href: '/code-of-conduct', 
+        icon: DocumentCheckIcon, 
+        description: 'Rules and guidelines for all members and stakeholders.' 
+      },
+      { 
+        name: 'Departed Members', 
+        href: '/departed-member', 
+        icon: IdentificationIcon, 
+        description: 'Honoring the memory of those who were part of our community.' 
       }
     ],
     services: [
       { 
-        name: 'Membership Registration', 
-        href: '/membership-form', 
+        name: 'All Services', 
+        href: '/services', 
         icon: HeartIcon, 
-        description: 'Supporting our local community' 
+        description: 'Browse the full range of services Gulshan Society offers.' 
+      },
+      { 
+        name: 'Membership Registration', 
+        href: '/services/membership-form', 
+        icon: UserPlusIcon, 
+        description: 'Register yourself or your family as members of the society.' 
       },
       { 
         name: 'Car Registration', 
-        href: '/car-registration', 
+        href: '/services/car-registration', 
         icon: HandRaisedIcon, 
-        description: 'Helping those in need' 
+        description: 'Register your vehicle for residential area access and security.' 
       },
       { 
         name: 'House Registration', 
-        href: '/house-registration', 
-        icon: AcademicCapIcon, 
-        description: 'Learning and development' 
+        href: '/services/house-registration', 
+        icon: BuildingOffice2Icon, 
+        description: 'Record or update your residence and ownership details.' 
       },
       { 
         name: 'Maintenance Support', 
-        href: '/maintenance-support', 
+        href: '/services/maintenance-support', 
         icon: BookmarkIcon, 
-        description: 'Promoting healthy living' 
+        description: 'Request maintenance, repairs, or other support services.' 
       }
     ]
   }
@@ -185,8 +205,8 @@ const Navber = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Gulshan Society
+            <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
+              <Image src="/Gulshan-Society-Logo.webp" alt="Gulshan Society" width={80} height={80} />
             </Link>
           </div>
 
@@ -196,7 +216,7 @@ const Navber = () => {
             <div className="relative group" data-dropdown>
               <button
                 onClick={() => toggleDropdown('about')}
-                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium"
+                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
               >
                 <span>About</span>
                 <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'about' ? 'rotate-180' : ''}`} />
@@ -210,14 +230,14 @@ const Navber = () => {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className="flex items-start space-x-3 px-4 py-3 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-600 dark:focus:text-blue-400 active:bg-blue-50 dark:active:bg-blue-900/20 active:text-blue-600 dark:active:text-blue-400 transition-all duration-200 group rounded-lg mx-2"
+                        className="flex items-start space-x-3 px-4 py-3 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-primary-600 dark:focus:text-primary-400 active:bg-blue-50 dark:active:bg-blue-900/20 active:text-primary-600 dark:active:text-primary-400 transition-all duration-200 group rounded-lg mx-2"
                         onClick={closeDropdowns}
                       >
                         <div className="flex-shrink-0 mt-0.5">
-                          <IconComponent className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-focus:text-blue-600 dark:group-focus:text-blue-400 group-active:text-blue-600 dark:group-active:text-blue-400 transition-colors duration-200" />
+                          <IconComponent className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-primary dark:group-hover:text-primary-400 group-focus:text-primary dark:group-focus:text-primary-400 group-active:text-primary dark:group-active:text-primary-400 transition-colors duration-200" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-focus:text-blue-600 dark:group-focus:text-blue-400 group-active:text-blue-600 dark:group-active:text-blue-400 transition-colors duration-200">
+                          <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary dark:group-hover:text-primary-400 group-focus:text-primary dark:group-focus:text-primary-400 group-active:text-primary dark:group-active:text-primary-400 transition-colors duration-200">
                             {item.name}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors duration-200">
@@ -235,7 +255,7 @@ const Navber = () => {
             <div className="relative group" data-dropdown>
               <button
                 onClick={() => toggleDropdown('membership')}
-                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium"
+                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
               >
                 <span>Membership</span>
                 <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'membership' ? 'rotate-180' : ''}`} />
@@ -249,14 +269,14 @@ const Navber = () => {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className="flex items-start space-x-3 px-4 py-3 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-600 dark:focus:text-blue-400 active:bg-blue-50 dark:active:bg-blue-900/20 active:text-blue-600 dark:active:text-blue-400 transition-all duration-200 group rounded-lg mx-2"
+                        className="flex items-start space-x-3 px-4 py-3 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-primary-600 dark:focus:text-primary-400 active:bg-blue-50 dark:active:bg-blue-900/20 active:text-primary-600 dark:active:text-primary-400 transition-all duration-200 group rounded-lg mx-2"
                         onClick={closeDropdowns}
                       >
                         <div className="flex-shrink-0 mt-0.5">
-                          <IconComponent className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-focus:text-blue-600 dark:group-focus:text-blue-400 group-active:text-blue-600 dark:group-active:text-blue-400 transition-colors duration-200" />
+                          <IconComponent className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-primary dark:group-hover:text-primary-400 group-focus:text-primary dark:group-focus:text-primary-400 group-active:text-primary dark:group-active:text-primary-400 transition-colors duration-200" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-focus:text-blue-600 dark:group-focus:text-blue-400 group-active:text-blue-600 dark:group-active:text-blue-400 transition-colors duration-200">
+                          <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary dark:group-hover:text-primary-400 group-focus:text-primary dark:group-focus:text-primary-400 group-active:text-primary dark:group-active:text-primary-400 transition-colors duration-200">
                             {item.name}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors duration-200">
@@ -274,7 +294,7 @@ const Navber = () => {
             <div className="relative group" data-dropdown>
               <button
                 onClick={() => toggleDropdown('services')}
-                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium"
+                className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
               >
                 <span>Services</span>
                 <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'services' ? 'rotate-180' : ''}`} />
@@ -288,14 +308,14 @@ const Navber = () => {
                       <Link
                         key={item.name}
                         href={item.href}
-                        className="flex items-start space-x-3 px-4 py-3 text-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-blue-600 dark:focus:text-blue-400 active:bg-blue-50 dark:active:bg-blue-900/20 active:text-blue-600 dark:active:text-blue-400 transition-all duration-200 group rounded-lg mx-2"
+                        className="flex items-start space-x-3 px-4 py-3 text-sm hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400 focus:bg-blue-50 dark:focus:bg-blue-900/20 focus:text-primary-600 dark:focus:text-primary-400 active:bg-blue-50 dark:active:bg-blue-900/20 active:text-primary-600 dark:active:text-primary-400 transition-all duration-200 group rounded-lg mx-2"
                         onClick={closeDropdowns}
                       >
                         <div className="flex-shrink-0 mt-0.5">
-                          <IconComponent className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-focus:text-blue-600 dark:group-focus:text-blue-400 group-active:text-blue-600 dark:group-active:text-blue-400 transition-colors duration-200" />
+                          <IconComponent className="w-5 h-5 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 group-focus:text-primary-600 dark:group-focus:text-primary-400 group-active:text-primary-600 dark:group-active:text-primary-400 transition-colors duration-200" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-focus:text-blue-600 dark:group-focus:text-blue-400 group-active:text-blue-600 dark:group-active:text-blue-400 transition-colors duration-200">
+                          <p className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 group-focus:text-primary-600 dark:group-focus:text-primary-400 group-active:text-primary-600 dark:group-active:text-primary-400 transition-colors duration-200">
                             {item.name}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors duration-200">
@@ -310,13 +330,13 @@ const Navber = () => {
             </div>
 
             {/* Direct Links */}
-            <Link href="/media-page" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium">
+            <Link href="/media-page" className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium">
               Media
             </Link>
-            <Link href="/event-page" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium">
+            <Link href="/event-page" className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium">
               Events
             </Link>
-            <Link href="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium">
+            <Link href="/contact" className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium">
               Contact
             </Link>
 
@@ -363,7 +383,7 @@ const Navber = () => {
                 <div>
                   <button
                     onClick={() => toggleDropdown(activeDropdown === 'about' ? null : 'about')}
-                    className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:text-blue-600 dark:focus:text-blue-400 active:text-blue-600 dark:active:text-blue-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
+                    className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 focus:text-primary dark:focus:text-primary-400 active:text-primary dark:active:text-primary-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
                   >
                     About
                     <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'about' ? 'rotate-180' : ''}`} />
@@ -376,17 +396,17 @@ const Navber = () => {
                           <Link
                             key={item.name}
                             href={item.href}
-                            className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-blue-600 dark:focus:text-blue-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-blue-600 dark:active:text-blue-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-blue-500 focus:border-blue-500 focus:outline-none group"
+                            className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-primary dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-primary dark:focus:text-primary-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-primary dark:active:text-primary-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-primary-500 focus:border-primary-500 focus:outline-none group"
                             onClick={() => {
                               setIsMenuOpen(false)
                               closeDropdowns()
                             }}
                           >
                             <div className="flex-shrink-0 mt-0.5">
-                              <IconComponent className="w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200" />
+                              <IconComponent className="w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-primary dark:group-hover:text-primary-400 transition-colors duration-200" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="font-medium text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                              <p className="font-medium text-gray-800 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
                                 {item.name}
                               </p>
                               <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -404,7 +424,7 @@ const Navber = () => {
                 <div>
                   <button
                     onClick={() => toggleDropdown(activeDropdown === 'membership' ? null : 'membership')}
-                    className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:text-blue-600 dark:focus:text-blue-400 active:text-blue-600 dark:active:text-blue-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
+                    className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:text-primary-600 dark:focus:text-primary-400 active:text-primary-600 dark:active:text-primary-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
                   >
                     Membership
                     <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'membership' ? 'rotate-180' : ''}`} />
@@ -417,17 +437,17 @@ const Navber = () => {
                           <Link
                             key={item.name}
                             href={item.href}
-                            className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-blue-600 dark:focus:text-blue-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-blue-600 dark:active:text-blue-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-blue-500 focus:border-blue-500 focus:outline-none group"
+                            className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-primary-600 dark:focus:text-primary-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-primary-600 dark:active:text-primary-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-primary-500 focus:border-primary-500 focus:outline-none group"
                             onClick={() => {
                               setIsMenuOpen(false)
                               closeDropdowns()
                             }}
                           >
                             <div className="flex-shrink-0 mt-0.5">
-                              <IconComponent className="w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200" />
+                              <IconComponent className="w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="font-medium text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                              <p className="font-medium text-gray-800 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
                                 {item.name}
                               </p>
                               <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -445,7 +465,7 @@ const Navber = () => {
                 <div>
                   <button
                     onClick={() => toggleDropdown(activeDropdown === 'services' ? null : 'services')}
-                    className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:text-blue-600 dark:focus:text-blue-400 active:text-blue-600 dark:active:text-blue-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
+                    className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:text-primary-600 dark:focus:text-primary-400 active:text-primary-600 dark:active:text-primary-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
                   >
                     Services
                     <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'services' ? 'rotate-180' : ''}`} />
@@ -458,17 +478,17 @@ const Navber = () => {
                           <Link
                             key={item.name}
                             href={item.href}
-                            className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-blue-600 dark:focus:text-blue-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-blue-600 dark:active:text-blue-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-blue-500 focus:border-blue-500 focus:outline-none group"
+                            className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-primary-600 dark:focus:text-primary-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-primary-600 dark:active:text-primary-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-primary-500 focus:border-primary-500 focus:outline-none group"
                             onClick={() => {
                               setIsMenuOpen(false)
                               closeDropdowns()
                             }}
                           >
                             <div className="flex-shrink-0 mt-0.5">
-                              <IconComponent className="w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200" />
+                              <IconComponent className="w-4 h-4 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="font-medium text-gray-800 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                              <p className="font-medium text-gray-800 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-200">
                                 {item.name}
                               </p>
                               <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -485,21 +505,21 @@ const Navber = () => {
                 {/* Direct Links Mobile */}
                 <Link
                   href="/media-page"
-                  className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:text-blue-600 dark:focus:text-blue-400 focus:bg-gray-50 dark:focus:bg-gray-700 active:text-blue-600 dark:active:text-blue-400 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200 focus:outline-none"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:text-primary-600 dark:focus:text-primary-400 focus:bg-gray-50 dark:focus:bg-gray-700 active:text-primary-600 dark:active:text-primary-400 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200 focus:outline-none"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Media
                 </Link>
                 <Link
                   href="/event-page"
-                  className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:text-blue-600 dark:focus:text-blue-400 focus:bg-gray-50 dark:focus:bg-gray-700 active:text-blue-600 dark:active:text-blue-400 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200 focus:outline-none"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:text-primary-600 dark:focus:text-primary-400 focus:bg-gray-50 dark:focus:bg-gray-700 active:text-primary-600 dark:active:text-primary-400 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200 focus:outline-none"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Events
                 </Link>
                 <Link
                   href="/contact"
-                  className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:text-blue-600 dark:focus:text-blue-400 focus:bg-gray-50 dark:focus:bg-gray-700 active:text-blue-600 dark:active:text-blue-400 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200 focus:outline-none"
+                  className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:text-primary-600 dark:focus:text-primary-400 focus:bg-gray-50 dark:focus:bg-gray-700 active:text-primary-600 dark:active:bg-blue-400 active:bg-gray-50 rounded-md transition-all duration-200 focus:outline-none"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Contact

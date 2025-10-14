@@ -137,17 +137,17 @@ const Events = () => {
   const events = activeTab === 'upcoming' ? upcomingEvents : completedEvents
 
   return (
-    <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 ">
+    <section className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="inline-flex items-center space-x-2 bg-primary-100 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4">
             <CalendarDaysIcon className="w-4 h-4" />
             <span>Community Events</span>
           </div>
           
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            Upcoming & <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Past Events</span>
+            Upcoming & <span className="text-primary">Past Events</span>
           </h2>
           
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -160,10 +160,10 @@ const Events = () => {
           <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-2 flex space-x-2">
             <button
               onClick={() => setActiveTab('upcoming')}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 ${
+              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 border border-gray-200 dark:border-gray-700 ${
                 activeTab === 'upcoming'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-primary'
               }`}
             >
               <SparklesIcon className="w-5 h-5" />
@@ -171,10 +171,10 @@ const Events = () => {
             </button>
             <button
               onClick={() => setActiveTab('completed')}
-              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 ${
+              className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 border border-gray-200 dark:border-gray-700 ${
                 activeTab === 'completed'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-primary'
               }`}
             >
               <TrophyIcon className="w-5 h-5" />
@@ -188,7 +188,7 @@ const Events = () => {
           {events.map((event) => (
             <div 
               key={event.id}
-              className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
+              className="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
             >
               {/* Event Image */}
               <div className="relative h-48 overflow-hidden">
@@ -217,7 +217,7 @@ const Events = () => {
 
               {/* Event Content */}
               <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary dark:group-hover:text-blue-400 transition-colors duration-300">
                   {event.title}
                 </h3>
                 
@@ -266,7 +266,7 @@ const Events = () => {
                 {/* Action Button */}
                 <div className="flex space-x-3">
                   {event.status === 'upcoming' ? (
-                    <button className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
+                    <button className="flex-1 bg-primary hover:bg-primary-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
                       <span>Register Now</span>
                       <ArrowRightIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
                     </button>
@@ -284,7 +284,7 @@ const Events = () => {
 
         {/* Bottom CTA */}
         <div className="text-center">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
+          <div className="bg-primary-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               Want to Organize an Event?
             </h3>
@@ -295,14 +295,14 @@ const Events = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
                 href="/events/create"
-                className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <SparklesIcon className="mr-2 w-4 h-4" />
                 <span>Propose Event</span>
               </Link>
               <Link 
                 href="/events"
-                className="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 text-gray-900 dark:text-gray-100 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:border-primary text-gray-900 dark:text-gray-100 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <CalendarDaysIcon className="mr-2 w-4 h-4" />
                 <span>View All Events</span>

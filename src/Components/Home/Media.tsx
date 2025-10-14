@@ -187,17 +187,17 @@ const Media = () => {
   }
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-900">
+    <section className="py-16" style={{background: 'linear-gradient(to bottom, #FDF2F0, #FCE4E0)'}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="inline-flex items-center space-x-2 bg-primary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
             <PhotoIcon className="w-4 h-4" />
             <span>Community Media</span>
           </div>
           
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            Community <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Gallery & News</span>
+            Community <span className="text-gradient-primary">Gallery & News</span>
           </h2>
           
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -212,8 +212,8 @@ const Media = () => {
               onClick={() => setActiveTab('photos')}
               className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 ${
                 activeTab === 'photos'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-primary'
               }`}
             >
               <PhotoIcon className="w-5 h-5" />
@@ -223,8 +223,8 @@ const Media = () => {
               onClick={() => setActiveTab('videos')}
               className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 ${
                 activeTab === 'videos'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-primary'
               }`}
             >
               <VideoCameraIcon className="w-5 h-5" />
@@ -234,8 +234,8 @@ const Media = () => {
               onClick={() => setActiveTab('news')}
               className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center space-x-2 ${
                 activeTab === 'news'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
+                  ? 'bg-primary text-white shadow-lg'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-primary'
               }`}
             >
               <NewspaperIcon className="w-5 h-5" />
@@ -250,7 +250,7 @@ const Media = () => {
             {photos.map((photo) => (
               <div 
                 key={photo.id}
-                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
+                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
               >
                 <div className="relative h-64 overflow-hidden">
                   <Image 
@@ -273,7 +273,7 @@ const Media = () => {
                 </div>
                 
                 <div className="p-4">
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary dark:group-hover:text-blue-400 transition-colors duration-300">
                     {photo.title}
                   </h3>
                   <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
@@ -291,7 +291,7 @@ const Media = () => {
             {videos.map((video) => (
               <div 
                 key={video.id}
-                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
+                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
               >
                 <div className="relative h-48 overflow-hidden">
                   <Image 
@@ -304,7 +304,7 @@ const Media = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="bg-white/90 dark:bg-gray-800/90 rounded-full p-4 group-hover:scale-110 transition-transform duration-300">
-                      <PlayIcon className="w-8 h-8 text-blue-600" />
+                      <PlayIcon className="w-8 h-8 text-primary" />
                     </div>
                   </div>
                   <div className="absolute top-4 left-4">
@@ -322,7 +322,7 @@ const Media = () => {
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary dark:group-hover:text-blue-400 transition-colors duration-300">
                     {video.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed">
@@ -343,7 +343,7 @@ const Media = () => {
             {news.map((article) => (
               <div 
                 key={article.id}
-                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
+                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
               >
                 <div className="relative h-48 overflow-hidden">
                   <Image 
@@ -366,7 +366,7 @@ const Media = () => {
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-primary dark:group-hover:text-blue-400 transition-colors duration-300">
                     {article.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed">
@@ -379,7 +379,7 @@ const Media = () => {
                     </div>
                     <span className="text-xs">By {article.author}</span>
                   </div>
-                  <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
+                  <button className="w-full bg-gradient-primary hover:bg-gradient-primary-dark text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
                     <span>Read More</span>
                     <ArrowTopRightOnSquareIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
                   </button>
@@ -402,14 +402,14 @@ const Media = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
                 href="/media/submit"
-                className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-3 bg-gradient-primary hover:bg-gradient-primary-dark text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <PhotoIcon className="mr-2 w-4 h-4" />
                 <span>Submit Content</span>
               </Link>
               <Link 
                 href="/media"
-                className="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 text-gray-900 dark:text-gray-100 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                className="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:border-primary text-gray-900 dark:text-gray-100 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <ArrowRightIcon className="mr-2 w-4 h-4" />
                 <span>View All Media</span>

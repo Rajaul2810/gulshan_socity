@@ -1,0 +1,106 @@
+/* Custom Color System for Gulshan Society */
+/* Primary Color: #803E2E */
+
+:root {
+  /* Primary Color Palette */
+  --primary-50: #FDF2F0;
+  --primary-100: #FCE4E0;
+  --primary-200: #F8C9C0;
+  --primary-300: #F4AEA0;
+  --primary-400: #F09380;
+  --primary-500: #EC7860;
+  --primary-600: #E85D40;
+  --primary-700: #D44A2C;
+  --primary-800: #B83D25;
+  --primary-900: #9C301E;
+  --primary: #803E2E;
+  --primary-light: #A55A4A;
+  --primary-dark: #6B2F1F;
+}
+
+/* Utility Classes */
+.bg-primary { background-color: var(--primary) !important; }
+.bg-primary-50 { background-color: var(--primary-50) !important; }
+.bg-primary-100 { background-color: var(--primary-100) !important; }
+.bg-primary-200 { background-color: var(--primary-200) !important; }
+.bg-primary-300 { background-color: var(--primary-300) !important; }
+.bg-primary-400 { background-color: var(--primary-400) !important; }
+.bg-primary-500 { background-color: var(--primary-500) !important; }
+.bg-primary-600 { background-color: var(--primary-600) !important; }
+.bg-primary-700 { background-color: var(--primary-700) !important; }
+.bg-primary-800 { background-color: var(--primary-800) !important; }
+.bg-primary-900 { background-color: var(--primary-900) !important; }
+
+.text-primary { color: var(--primary) !important; }
+.text-primary-50 { color: var(--primary-50) !important; }
+.text-primary-100 { color: var(--primary-100) !important; }
+.text-primary-200 { color: var(--primary-200) !important; }
+.text-primary-300 { color: var(--primary-300) !important; }
+.text-primary-400 { color: var(--primary-400) !important; }
+.text-primary-500 { color: var(--primary-500) !important; }
+.text-primary-600 { color: var(--primary-600) !important; }
+.text-primary-700 { color: var(--primary-700) !important; }
+.text-primary-800 { color: var(--primary-800) !important; }
+.text-primary-900 { color: var(--primary-900) !important; }
+
+.border-primary { border-color: var(--primary) !important; }
+.border-primary-50 { border-color: var(--primary-50) !important; }
+.border-primary-100 { border-color: var(--primary-100) !important; }
+.border-primary-200 { border-color: var(--primary-200) !important; }
+.border-primary-300 { border-color: var(--primary-300) !important; }
+.border-primary-400 { border-color: var(--primary-400) !important; }
+.border-primary-500 { border-color: var(--primary-500) !important; }
+.border-primary-600 { border-color: var(--primary-600) !important; }
+.border-primary-700 { border-color: var(--primary-700) !important; }
+.border-primary-800 { border-color: var(--primary-800) !important; }
+.border-primary-900 { border-color: var(--primary-900) !important; }
+
+/* Hover States */
+.hover\:bg-primary:hover { background-color: var(--primary) !important; }
+.hover\:bg-primary-50:hover { background-color: var(--primary-50) !important; }
+.hover\:bg-primary-100:hover { background-color: var(--primary-100) !important; }
+.hover\:bg-primary-200:hover { background-color: var(--primary-200) !important; }
+.hover\:bg-primary-300:hover { background-color: var(--primary-300) !important; }
+.hover\:bg-primary-400:hover { background-color: var(--primary-400) !important; }
+.hover\:bg-primary-500:hover { background-color: var(--primary-500) !important; }
+.hover\:bg-primary-600:hover { background-color: var(--primary-600) !important; }
+.hover\:bg-primary-700:hover { background-color: var(--primary-700) !important; }
+.hover\:bg-primary-800:hover { background-color: var(--primary-800) !important; }
+.hover\:bg-primary-900:hover { background-color: var(--primary-900) !important; }
+
+.hover\:text-primary:hover { color: var(--primary) !important; }
+.hover\:text-primary-50:hover { color: var(--primary-50) !important; }
+.hover\:text-primary-100:hover { color: var(--primary-100) !important; }
+.hover\:text-primary-200:hover { color: var(--primary-200) !important; }
+.hover\:text-primary-300:hover { color: var(--primary-300) !important; }
+.hover\:text-primary-400:hover { color: var(--primary-400) !important; }
+.hover\:text-primary-500:hover { color: var(--primary-500) !important; }
+.hover\:text-primary-600:hover { color: var(--primary-600) !important; }
+.hover\:text-primary-700:hover { color: var(--primary-700) !important; }
+.hover\:text-primary-800:hover { color: var(--primary-800) !important; }
+.hover\:text-primary-900:hover { color: var(--primary-900) !important; }
+
+/* Focus States */
+.focus\:ring-primary:focus { --tw-ring-color: var(--primary) !important; }
+.focus\:border-primary:focus { border-color: var(--primary) !important; }
+
+/* Gradient Backgrounds */
+.bg-gradient-primary {
+  background: linear-gradient(to right, var(--primary-600), var(--primary-700)) !important;
+}
+
+.bg-gradient-primary-light {
+  background: linear-gradient(to right, var(--primary-500), var(--primary-600)) !important;
+}
+
+.bg-gradient-primary-dark {
+  background: linear-gradient(to right, var(--primary-700), var(--primary-800)) !important;
+}
+
+/* Text Gradients */
+.text-gradient-primary {
+  background: linear-gradient(to right, var(--primary-600), var(--primary-700), var(--primary-800));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
