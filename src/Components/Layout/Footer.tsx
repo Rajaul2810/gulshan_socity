@@ -18,6 +18,7 @@ import {
   ArrowRightIcon,
   ArrowUpIcon
 } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -33,13 +34,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-2xl">
-                <HomeIcon className="w-8 h-8 text-white" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-white">Gulshan Society</h3>
-                <p className="text-gray-400 text-sm">Community Hub</p>
-              </div>
+              <Image src="/Gulshan-Society-Logo.webp" alt="Gulshan Society" width={100} height={100} />
             </div>
             
             <p className="text-gray-300 mb-6 leading-relaxed">
@@ -91,7 +86,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="/membership-form" 
+                  href="/services/membership-form" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <ArrowRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -134,7 +129,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link 
-                  href="/membership-form" 
+                  href="/services/membership-form" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <UserGroupIcon className="w-4 h-4" />
@@ -143,7 +138,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="/car-registration" 
+                  href="/services/car-registration" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <DocumentTextIcon className="w-4 h-4" />
@@ -152,7 +147,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="/house-registration" 
+                  href="/services/house-registration" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <HomeIcon className="w-4 h-4" />
@@ -161,7 +156,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="/maintenance-support" 
+                  href="/services/maintenance-support" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <HeartIcon className="w-4 h-4" />
@@ -170,7 +165,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="/security-services" 
+                  href="/services/security-services" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <HeartIcon className="w-4 h-4" />
@@ -179,7 +174,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  href="/utility-management" 
+                  href="/services/utility-management" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <HeartIcon className="w-4 h-4" />

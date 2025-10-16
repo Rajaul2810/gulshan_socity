@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import Link from 'next/link'
-import { 
+import React, { useState } from "react";
+import Link from "next/link";
+import {
   PhoneIcon,
   EnvelopeIcon,
   MapPinIcon,
@@ -10,100 +10,58 @@ import {
   ArrowRightIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  BuildingOfficeIcon
-} from '@heroicons/react/24/outline'
+  BuildingOfficeIcon,
+} from "@heroicons/react/24/outline";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    category: 'general',
-    message: '',
-    preferredContact: 'email',
-    termsAccepted: false
-  })
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    category: "general",
+    message: "",
+    preferredContact: "email",
+    termsAccepted: false,
+  });
 
-  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [formStatus, setFormStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target
-    setFormData(prev => ({
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { name, value, type } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
-    }))
-  }
+      [name]:
+        type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setFormStatus('submitting')
-    
+    e.preventDefault();
+    setFormStatus("submitting");
+
     // Simulate form submission
     setTimeout(() => {
-      setFormStatus('success')
+      setFormStatus("success");
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        category: 'general',
-        message: '',
-        preferredContact: 'email',
-        termsAccepted: false
-      })
-    }, 2000)
-  }
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        category: "general",
+        message: "",
+        preferredContact: "email",
+        termsAccepted: false,
+      });
+    }, 2000);
+  };
 
-  const contactMethods = [
-    {
-      icon: <PhoneIcon className="w-8 h-8" />,
-      title: "Phone",
-      description: "Call us for immediate assistance",
-      contact: "+880 1712 345 678",
-      action: "tel:+8801712345678",
-      color: "from-green-500 to-emerald-500",
-      bgColor: "from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20",
-      borderColor: "border-green-200 dark:border-green-800"
-    },
-    {
-      icon: <EnvelopeIcon className="w-8 h-8" />,
-      title: "Email",
-      description: "Send us an email anytime",
-      contact: "info@gulshansociety.com",
-      action: "mailto:info@gulshansociety.com",
-      color: "from-blue-500 to-cyan-500",
-      bgColor: "from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20",
-      borderColor: "border-blue-200 dark:border-blue-800"
-    },
-    {
-      icon: <ChatBubbleLeftRightIcon className="w-8 h-8" />,
-      title: "Live Chat",
-      description: "Chat with us online",
-      contact: "Available 9 AM - 5 PM",
-      action: "#",
-      color: "from-purple-500 to-pink-500",
-      bgColor: "from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20",
-      borderColor: "border-purple-200 dark:border-purple-800"
-    },
-    {
-      icon: <MapPinIcon className="w-8 h-8" />,
-      title: "Visit Us",
-      description: "Come to our office",
-      contact: "Gulshan Block 6, Dhaka",
-      action: "https://maps.google.com",
-      color: "from-orange-500 to-red-500",
-      bgColor: "from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20",
-      borderColor: "border-orange-200 dark:border-orange-800"
-    }
-  ]
-
-  const officeHours = [
-    { day: "Monday - Friday", time: "9:00 AM - 5:00 PM" },
-    { day: "Saturday", time: "9:00 AM - 2:00 PM" },
-    { day: "Sunday", time: "Closed" },
-    { day: "Emergency", time: "24/7 Hotline Available" }
-  ]
 
 
   return (
@@ -116,57 +74,108 @@ const Contact = () => {
               <ChatBubbleLeftRightIcon className="w-4 h-4" />
               <span>Contact Us</span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl font-bold mb-4">
               Get in <span className="text-yellow-300">Touch</span>
             </h1>
-            
+
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              We&apos;re here to help! Reach out to us through any of our contact methods 
-              and we&apos;ll get back to you as soon as possible.
+              For inquiries or assistance, reach out to us. Join our community for cultural events, civic projects, and positive impact in Gulshan Model Town.
             </p>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        
         {/* Contact Methods */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 text-center mb-12">
-            How Can We Help You?
+            Contact Details
           </h2>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {contactMethods.map((method, index) => (
-              <a
-                key={index}
-                href={method.action}
-                className={`group bg-gradient-to-br ${method.bgColor} rounded-2xl p-6 border ${method.borderColor} hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2`}
-              >
-                <div className="flex flex-col items-center text-center space-y-4">
-                  <div className={`bg-gradient-to-r ${method.color} p-4 rounded-2xl text-white group-hover:scale-110 transition-transform duration-300`}>
-                    {method.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                      {method.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
-                      {method.description}
-                    </p>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {method.contact}
-                    </p>
-                  </div>
+            <div className="group bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 border border-green-200 dark:border-green-800 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-4 rounded-2xl text-white group-hover:scale-110 transition-transform duration-300">
+                  <PhoneIcon className="w-8 h-8" />
                 </div>
-              </a>
-            ))}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    Phone
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                    Call us for immediate assistance
+                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    +88-02-9881375<br />
+                    +880 1715-882117
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-2xl p-6 border border-blue-200 dark:border-blue-800 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 p-4 rounded-2xl text-white group-hover:scale-110 transition-transform duration-300">
+                  <EnvelopeIcon className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    Email
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                    Send us an email anytime
+                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    gulshansociety@gmail.com
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl p-6 border border-purple-200 dark:border-purple-800 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 rounded-2xl text-white group-hover:scale-110 transition-transform duration-300">
+                  <BuildingOfficeIcon className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    Website
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                    Visit our website
+                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    www.gulshansociety.com
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-2xl p-6 border border-orange-200 dark:border-orange-800 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="bg-gradient-to-r from-orange-500 to-red-500 p-4 rounded-2xl text-white group-hover:scale-110 transition-transform duration-300">
+                  <MapPinIcon className="w-8 h-8" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                    Office Address
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">
+                    Visit our office
+                  </p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                    House# 7/B, Flat# A-1<br />
+                    Road# 103, Gulshan-2<br />
+                    Dhaka-1212
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-12">
-          
           {/* Contact Form */}
           <div className="lg:col-span-2">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 p-8">
@@ -174,13 +183,17 @@ const Contact = () => {
                 Send us a Message
               </h2>
 
-              {formStatus === 'success' && (
+              {formStatus === "success" && (
                 <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl">
                   <div className="flex items-center space-x-3">
                     <CheckCircleIcon className="w-6 h-6 text-green-600" />
                     <div>
-                      <h3 className="text-green-800 dark:text-green-300 font-semibold">Message Sent Successfully!</h3>
-                      <p className="text-green-700 dark:text-green-400 text-sm">We&apos;ll get back to you within 24 hours.</p>
+                      <h3 className="text-green-800 dark:text-green-300 font-semibold">
+                        Message Sent Successfully!
+                      </h3>
+                      <p className="text-green-700 dark:text-green-400 text-sm">
+                        We&apos;ll get back to you within 24 hours.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -312,9 +325,23 @@ const Contact = () => {
                     />
                     <div className="text-sm text-gray-600 dark:text-gray-300">
                       <p>
-                        I agree to the <Link href="/terms" className="text-blue-600 hover:text-blue-700 underline">Terms and Conditions</Link> and 
-                        <Link href="/privacy" className="text-blue-600 hover:text-blue-700 underline"> Privacy Policy</Link> of Gulshan Society. 
-                        I understand that my information will be used to respond to my inquiry.
+                        I agree to the{" "}
+                        <Link
+                          href="/terms"
+                          className="text-blue-600 hover:text-blue-700 underline"
+                        >
+                          Terms and Conditions
+                        </Link>{" "}
+                        and
+                        <Link
+                          href="/privacy"
+                          className="text-blue-600 hover:text-blue-700 underline"
+                        >
+                          {" "}
+                          Privacy Policy
+                        </Link>{" "}
+                        of Gulshan Society. I understand that my information
+                        will be used to respond to my inquiry.
                       </p>
                     </div>
                   </div>
@@ -323,10 +350,10 @@ const Contact = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  disabled={formStatus === 'submitting'}
+                  disabled={formStatus === "submitting"}
                   className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
                 >
-                  {formStatus === 'submitting' ? (
+                  {formStatus === "submitting" ? (
                     <>
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                       <span>Sending...</span>
@@ -344,57 +371,43 @@ const Contact = () => {
 
           {/* Contact Information Sidebar */}
           <div className="space-y-8">
-            
             {/* Office Information */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
               <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                 Office Information
               </h3>
-              
+
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <BuildingOfficeIcon className="w-6 h-6 text-blue-600 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">Main Office</h4>
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                      Main Office
+                    </h4>
                     <p className="text-gray-600 dark:text-gray-300 text-sm">
-                      Gulshan Society Management Office<br />
-                      Gulshan Block 6, House #123<br />
-                      Dhaka 1212, Bangladesh
+                      Gulshan Society Management Office
+                      <br />
+                      House# 7/B, Flat# A-1
+                      <br />
+                      Road# 103, Gulshan-2, Dhaka-1212
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-3">
                   <MapPinIcon className="w-6 h-6 text-blue-600 mt-1" />
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">Location</h4>
+                    <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                      Location
+                    </h4>
                     <p className="text-gray-600 dark:text-gray-300 text-sm">
-                      Near Gulshan Circle 1<br />
-                      Opposite to Gulshan Park<br />
+                      Gulshan-2 Area<br />
+                      Near Gulshan Circle 2
+                      <br />
                       Easy access by public transport
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Office Hours */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6">
-                Office Hours
-              </h3>
-              
-              <div className="space-y-3">
-                {officeHours.map((schedule, index) => (
-                  <div key={index} className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {schedule.day}
-                    </span>
-                    <span className="text-sm text-gray-600 dark:text-gray-300">
-                      {schedule.time}
-                    </span>
-                  </div>
-                ))}
               </div>
             </div>
 
@@ -407,17 +420,18 @@ const Contact = () => {
                   Emergency Contact
                 </h3>
               </div>
-              
+
               <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                For urgent security or maintenance issues that require immediate attention.
+                For urgent security or maintenance issues that require immediate
+                attention.
               </p>
-              
+
               <a
-                href="tel:+8801712345681"
+                href="tel:+8801715882117"
                 className="inline-flex items-center justify-center w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <PhoneIcon className="mr-2 w-5 h-5" />
-                <span>Emergency Hotline</span>
+                <span>Emergency Hotline: +880 1715-882117</span>
               </a>
             </div>
           </div>
@@ -428,30 +442,22 @@ const Contact = () => {
           <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 text-center mb-8">
             Find Us
           </h2>
-          
+
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
-            <div className="aspect-video bg-gray-200 dark:bg-gray-700 rounded-xl flex items-center justify-center">
-              <div className="text-center">
-                <MapPinIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  Interactive map will be integrated here
-                </p>
-                <a
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300"
-                >
-                  <MapPinIcon className="mr-2 w-5 h-5" />
-                  <span>Open in Google Maps</span>
-                </a>
-              </div>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.501558656397!2d90.4052009748472!3d23.800757486842006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c705d63bfb3d%3A0x551bd1ffc5d6ed08!2sGulshan%20Society%20Jame%20Masjid!5e0!3m2!1sen!2sbd!4v1760642053633!5m2!1sen!2sbd"
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
-          </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Contact
+export default Contact;

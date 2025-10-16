@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { 
-  Bars3Icon, 
-  XMarkIcon, 
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import {
+  Bars3Icon,
+  XMarkIcon,
   ChevronDownIcon,
   SunIcon,
   MoonIcon,
@@ -16,187 +16,209 @@ import {
   UsersIcon,
   CogIcon,
   HeartIcon,
-  BookmarkIcon,
   HandRaisedIcon,
   IdentificationIcon,
   DocumentCheckIcon,
   BuildingOffice2Icon,
   UserIcon,
-  GlobeAltIcon
-} from '@heroicons/react/24/outline'
-import Image from 'next/image'
+  GlobeAltIcon,
+  QuestionMarkCircleIcon,
+  TicketIcon,
+} from "@heroicons/react/24/outline";
+import Image from "next/image";
 
-type Theme = 'light' | 'dark' | 'system'
+type Theme = "light" | "dark" | "system";
 
 const Navber = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  const [theme, setTheme] = useState<Theme>('system')
-  const [mounted, setMounted] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [theme, setTheme] = useState<Theme>("system");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-    const savedTheme = localStorage.getItem('theme') as Theme || 'system'
-    setTheme(savedTheme)
-  }, [])
+    setMounted(true);
+    const savedTheme = (localStorage.getItem("theme") as Theme) || "system";
+    setTheme(savedTheme);
+  }, []);
 
   useEffect(() => {
-    if (!mounted) return
-    
-    localStorage.setItem('theme', theme)
-    
-    const root = document.documentElement
-    if (theme === 'dark') {
-      root.classList.add('dark')
-    } else if (theme === 'light') {
-      root.classList.remove('dark')
+    if (!mounted) return;
+
+    localStorage.setItem("theme", theme);
+
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+    } else if (theme === "light") {
+      root.classList.remove("dark");
     } else {
       // System theme
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      if (systemTheme === 'dark') {
-        root.classList.add('dark')
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
+      if (systemTheme === "dark") {
+        root.classList.add("dark");
       } else {
-        root.classList.remove('dark')
+        root.classList.remove("dark");
       }
     }
-  }, [theme, mounted])
+  }, [theme, mounted]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element
-      if (!target.closest('[data-dropdown]')) {
-        setActiveDropdown(null)
+      const target = event.target as Element;
+      if (!target.closest("[data-dropdown]")) {
+        setActiveDropdown(null);
       }
-    }
+    };
 
     if (activeDropdown) {
-      document.addEventListener('click', handleClickOutside)
+      document.addEventListener("click", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [activeDropdown])
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [activeDropdown]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : prev === 'dark' ? 'system' : 'light')
-  }
+    setTheme((prev) =>
+      prev === "light" ? "dark" : prev === "dark" ? "system" : "light"
+    );
+  };
 
   const getThemeIcon = () => {
     switch (theme) {
-      case 'light':
-        return <SunIcon className="w-5 h-5" />
-      case 'dark':
-        return <MoonIcon className="w-5 h-5" />
+      case "light":
+        return <SunIcon className="w-5 h-5" />;
+      case "dark":
+        return <MoonIcon className="w-5 h-5" />;
       default:
-        return <ComputerDesktopIcon className="w-5 h-5" />
+        return <ComputerDesktopIcon className="w-5 h-5" />;
     }
-  }
+  };
 
   const dropdownItems = {
     about: [
-      { 
-        name: 'Our Activities', 
-        href: '/about', 
-        icon: BookOpenIcon, 
-        description: 'View reports, photos, and stories from Gulshan Society\'s activities and initiatives.' 
+      {
+        name: "Our Activities",
+        href: "/about",
+        icon: BookOpenIcon,
+        description:
+          "View reports, photos, and stories from Gulshan Society's activities and initiatives.",
       },
-      { 
-        name: 'Mission & Vision', 
-        href: '/about/mission', 
-        icon: GlobeAltIcon, 
-        description: 'Read about our guiding principles, objectives, and vision for the future.' 
+      {
+        name: "Mission & Vision",
+        href: "/about/mission",
+        icon: GlobeAltIcon,
+        description:
+          "Read about our guiding principles, objectives, and vision for the future.",
       },
-      { 
-        name: "Previous EC's", 
-        href: '/about/previous-ec', 
-        icon: UserGroupIcon, 
-        description: 'See the list of earlier Executive Committee members who led the society.' 
+      {
+        name: "Previous EC's",
+        href: "/about/previous-ec",
+        icon: UserGroupIcon,
+        description:
+          "See the list of earlier Executive Committee members who led the society.",
       },
-      { 
-        name: 'History', 
-        href: '/about/history', 
-        icon: ClockIcon, 
-        description: 'Explore our foundation, mileposts, and the legacy of the organization.' 
-      }
+      {
+        name: "History",
+        href: "/about/history",
+        icon: ClockIcon,
+        description:
+          "Explore our foundation, mileposts, and the legacy of the organization.",
+      },
     ],
     membership: [
-      { 
-        name: 'Member List', 
-        href: '/member-list', 
-        icon: UsersIcon, 
-        description: 'View comprehensive list of all registered society members.' 
+      {
+        name: "Member List",
+        href: "/member-list",
+        icon: UsersIcon,
+        description:
+          "View comprehensive list of all registered society members.",
       },
-      { 
-        name: 'Member Services', 
-        href: '/member-services', 
-        icon: CogIcon, 
-        description: 'Access various resources and privileges exclusive to members.' 
+      {
+        name: "Member Services",
+        href: "/member-services",
+        icon: CogIcon,
+        description:
+          "Access various resources and privileges exclusive to members.",
       },
-      { 
-        name: 'Non-member Services', 
-        href: '/non-member-services', 
-        icon: UserIcon, 
-        description: 'Service information open for non-members and general community.' 
+      {
+        name: "Non-member Services",
+        href: "/non-member-services",
+        icon: UserIcon,
+        description:
+          "Service information open for non-members and general community.",
       },
-      { 
-        name: 'Code of Conduct', 
-        href: '/code-of-conduct', 
-        icon: DocumentCheckIcon, 
-        description: 'Rules and guidelines for all members and stakeholders.' 
+      {
+        name: "Code of Conduct",
+        href: "/code-of-conduct",
+        icon: DocumentCheckIcon,
+        description: "Rules and guidelines for all members and stakeholders.",
       },
-      { 
-        name: 'Departed Members', 
-        href: '/departed-member', 
-        icon: IdentificationIcon, 
-        description: 'Honoring the memory of those who were part of our community.' 
-      }
+      {
+        name: "Departed Members",
+        href: "/departed-member",
+        icon: IdentificationIcon,
+        description:
+          "Honoring the memory of those who were part of our community.",
+      },
     ],
     services: [
-      { 
-        name: 'All Services', 
-        href: '/services', 
-        icon: HeartIcon, 
-        description: 'Browse the full range of services Gulshan Society offers.' 
+      {
+        name: "All Services",
+        href: "/services",
+        icon: HeartIcon,
+        description:
+          "Browse the full range of services Gulshan Society offers.",
       },
-      { 
-        name: 'Membership Registration', 
-        href: '/services/membership-form', 
-        icon: UserPlusIcon, 
-        description: 'Register yourself or your family as members of the society.' 
+      {
+        name: "Membership Registration",
+        href: "/services/membership-form",
+        icon: UserPlusIcon,
+        description:
+          "Register yourself or your family as members of the society.",
       },
-      { 
-        name: 'Car Registration', 
-        href: '/services/car-registration', 
-        icon: HandRaisedIcon, 
-        description: 'Register your vehicle for residential area access and security.' 
+      {
+        name: "Car Sticker Application",
+        href: "/services/car-registration",
+        icon: HandRaisedIcon,
+        description: "Apply for a car sticker to access the residential area.",
       },
-      { 
-        name: 'House Registration', 
-        href: '/services/house-registration', 
-        icon: BuildingOffice2Icon, 
-        description: 'Record or update your residence and ownership details.' 
+      {
+        name: "Complaint Form",
+        href: "/services/complaint-form",
+        icon: BuildingOffice2Icon,
+        description: "Submit a complaint form to the society.",
       },
-      { 
-        name: 'Maintenance Support', 
-        href: '/services/maintenance-support', 
-        icon: BookmarkIcon, 
-        description: 'Request maintenance, repairs, or other support services.' 
-      }
-    ]
-  }
+      {
+        name: "Inquiry Form",
+        href: "/services/inquiry-form",
+        icon: QuestionMarkCircleIcon,
+        description: "Submit an inquiry form to the society.",
+      },
+      {
+        name: "Event Ticket Application",
+        href: "/services/event-ticket-application",
+        icon: TicketIcon,
+        description: "Apply for a ticket to attend an event.",
+      },
+    ],
+  };
 
   const toggleDropdown = (dropdown: string | null) => {
-    setActiveDropdown(activeDropdown === dropdown ? null : dropdown)
-  }
+    setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
+  };
 
   const closeDropdowns = () => {
-    setActiveDropdown(null)
-  }
+    setActiveDropdown(null);
+  };
 
   if (!mounted) {
-    return null
+    return null;
   }
 
   return (
@@ -205,27 +227,45 @@ const Navber = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
-              <Image src="/Gulshan-Society-Logo.webp" alt="Gulshan Society" width={80} height={80} />
+            <Link
+              href="/"
+              className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent"
+            >
+              <Image
+                src="/Gulshan-Society-Logo.webp"
+                alt="Gulshan Society"
+                width={80}
+                height={80}
+              />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
+            <Link
+              href="/"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
+            >
+              Home
+            </Link>
             {/* About Dropdown */}
             <div className="relative group" data-dropdown>
               <button
-                onClick={() => toggleDropdown('about')}
+                onClick={() => toggleDropdown("about")}
                 className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
               >
                 <span>About</span>
-                <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'about' ? 'rotate-180' : ''}`} />
+                <ChevronDownIcon
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    activeDropdown === "about" ? "rotate-180" : ""
+                  }`}
+                />
               </button>
-              
-              {activeDropdown === 'about' && (
+
+              {activeDropdown === "about" && (
                 <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 backdrop-blur-sm">
                   {dropdownItems.about.map((item) => {
-                    const IconComponent = item.icon
+                    const IconComponent = item.icon;
                     return (
                       <Link
                         key={item.name}
@@ -245,7 +285,7 @@ const Navber = () => {
                           </p>
                         </div>
                       </Link>
-                    )
+                    );
                   })}
                 </div>
               )}
@@ -254,17 +294,21 @@ const Navber = () => {
             {/* Membership Dropdown */}
             <div className="relative group" data-dropdown>
               <button
-                onClick={() => toggleDropdown('membership')}
+                onClick={() => toggleDropdown("membership")}
                 className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
               >
                 <span>Membership</span>
-                <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'membership' ? 'rotate-180' : ''}`} />
+                <ChevronDownIcon
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    activeDropdown === "membership" ? "rotate-180" : ""
+                  }`}
+                />
               </button>
-              
-              {activeDropdown === 'membership' && (
+
+              {activeDropdown === "membership" && (
                 <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 backdrop-blur-sm">
                   {dropdownItems.membership.map((item) => {
-                    const IconComponent = item.icon
+                    const IconComponent = item.icon;
                     return (
                       <Link
                         key={item.name}
@@ -284,7 +328,7 @@ const Navber = () => {
                           </p>
                         </div>
                       </Link>
-                    )
+                    );
                   })}
                 </div>
               )}
@@ -293,17 +337,21 @@ const Navber = () => {
             {/* Services Dropdown */}
             <div className="relative group" data-dropdown>
               <button
-                onClick={() => toggleDropdown('services')}
+                onClick={() => toggleDropdown("services")}
                 className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
               >
                 <span>Services</span>
-                <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'services' ? 'rotate-180' : ''}`} />
+                <ChevronDownIcon
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    activeDropdown === "services" ? "rotate-180" : ""
+                  }`}
+                />
               </button>
-              
-              {activeDropdown === 'services' && (
+
+              {activeDropdown === "services" && (
                 <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 py-3 z-50 backdrop-blur-sm">
                   {dropdownItems.services.map((item) => {
-                    const IconComponent = item.icon
+                    const IconComponent = item.icon;
                     return (
                       <Link
                         key={item.name}
@@ -323,27 +371,36 @@ const Navber = () => {
                           </p>
                         </div>
                       </Link>
-                    )
+                    );
                   })}
                 </div>
               )}
             </div>
 
             {/* Direct Links */}
-            <Link href="/media-page" className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium">
+            <Link
+              href="/media-page"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
+            >
               Media
             </Link>
-            <Link href="/event-page" className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium">
+            <Link
+              href="/event-page"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
+            >
               Events
             </Link>
-            <Link href="/contact" className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium">
+            <Link
+              href="/contact"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
+            >
               Contact
             </Link>
 
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              className="p-2 rounded-lg bg-gray-300 dark:bg-gray-800 hover:bg-gray-400 dark:hover:bg-gray-700 transition-colors duration-200"
               title={`Current theme: ${theme}`}
             >
               {getThemeIcon()}
@@ -355,11 +412,11 @@ const Navber = () => {
             {/* Theme Toggle for Mobile */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              className="p-2 rounded-lg bg-gray-300 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
             >
               {getThemeIcon()}
             </button>
-            
+
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
@@ -378,28 +435,42 @@ const Navber = () => {
           <div className="lg:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 max-h-screen overflow-y-auto">
               {/* Mobile Dropdown Menus */}
+              <Link
+                href="/"
+                className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 focus:text-primary dark:focus:text-primary-400 active:text-primary dark:active:text-primary-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
+              >
+                Home
+              </Link>
               <div className="space-y-2">
                 {/* About Mobile */}
                 <div>
                   <button
-                    onClick={() => toggleDropdown(activeDropdown === 'about' ? null : 'about')}
+                    onClick={() =>
+                      toggleDropdown(
+                        activeDropdown === "about" ? null : "about"
+                      )
+                    }
                     className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 focus:text-primary dark:focus:text-primary-400 active:text-primary dark:active:text-primary-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
                   >
                     About
-                    <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'about' ? 'rotate-180' : ''}`} />
+                    <ChevronDownIcon
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        activeDropdown === "about" ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
-                  {activeDropdown === 'about' && (
+                  {activeDropdown === "about" && (
                     <div className="pl-4 space-y-1 bg-gray-50 dark:bg-gray-700 rounded-lg mx-2 my-2 p-2 shadow-sm">
                       {dropdownItems.about.map((item) => {
-                        const IconComponent = item.icon
+                        const IconComponent = item.icon;
                         return (
                           <Link
                             key={item.name}
                             href={item.href}
                             className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-primary dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-primary dark:focus:text-primary-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-primary dark:active:text-primary-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-primary-500 focus:border-primary-500 focus:outline-none group"
                             onClick={() => {
-                              setIsMenuOpen(false)
-                              closeDropdowns()
+                              setIsMenuOpen(false);
+                              closeDropdowns();
                             }}
                           >
                             <div className="flex-shrink-0 mt-0.5">
@@ -414,7 +485,7 @@ const Navber = () => {
                               </p>
                             </div>
                           </Link>
-                        )
+                        );
                       })}
                     </div>
                   )}
@@ -423,24 +494,32 @@ const Navber = () => {
                 {/* Membership Mobile */}
                 <div>
                   <button
-                    onClick={() => toggleDropdown(activeDropdown === 'membership' ? null : 'membership')}
+                    onClick={() =>
+                      toggleDropdown(
+                        activeDropdown === "membership" ? null : "membership"
+                      )
+                    }
                     className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:text-primary-600 dark:focus:text-primary-400 active:text-primary-600 dark:active:text-primary-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
                   >
                     Membership
-                    <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'membership' ? 'rotate-180' : ''}`} />
+                    <ChevronDownIcon
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        activeDropdown === "membership" ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
-                  {activeDropdown === 'membership' && (
+                  {activeDropdown === "membership" && (
                     <div className="pl-4 space-y-1 bg-gray-50 dark:bg-gray-700 rounded-lg mx-2 my-2 p-2 shadow-sm">
                       {dropdownItems.membership.map((item) => {
-                        const IconComponent = item.icon
+                        const IconComponent = item.icon;
                         return (
                           <Link
                             key={item.name}
                             href={item.href}
                             className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-primary-600 dark:focus:text-primary-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-primary-600 dark:active:text-primary-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-primary-500 focus:border-primary-500 focus:outline-none group"
                             onClick={() => {
-                              setIsMenuOpen(false)
-                              closeDropdowns()
+                              setIsMenuOpen(false);
+                              closeDropdowns();
                             }}
                           >
                             <div className="flex-shrink-0 mt-0.5">
@@ -455,7 +534,7 @@ const Navber = () => {
                               </p>
                             </div>
                           </Link>
-                        )
+                        );
                       })}
                     </div>
                   )}
@@ -464,24 +543,32 @@ const Navber = () => {
                 {/* Services Mobile */}
                 <div>
                   <button
-                    onClick={() => toggleDropdown(activeDropdown === 'services' ? null : 'services')}
+                    onClick={() =>
+                      toggleDropdown(
+                        activeDropdown === "services" ? null : "services"
+                      )
+                    }
                     className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:text-primary-600 dark:focus:text-primary-400 active:text-primary-600 dark:active:text-primary-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
                   >
                     Services
-                    <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${activeDropdown === 'services' ? 'rotate-180' : ''}`} />
+                    <ChevronDownIcon
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        activeDropdown === "services" ? "rotate-180" : ""
+                      }`}
+                    />
                   </button>
-                  {activeDropdown === 'services' && (
+                  {activeDropdown === "services" && (
                     <div className="pl-4 space-y-1 bg-gray-50 dark:bg-gray-700 rounded-lg mx-2 my-2 p-2 shadow-sm">
                       {dropdownItems.services.map((item) => {
-                        const IconComponent = item.icon
+                        const IconComponent = item.icon;
                         return (
                           <Link
                             key={item.name}
                             href={item.href}
                             className="flex items-start space-x-3 px-3 py-2 text-sm hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-600 focus:text-primary-600 dark:focus:text-primary-400 focus:bg-gray-100 dark:focus:bg-gray-600 active:text-primary-600 dark:active:text-primary-400 active:bg-gray-100 dark:active:bg-gray-600 rounded-md transition-all duration-200 border-l-2 border-transparent hover:border-primary-500 focus:border-primary-500 focus:outline-none group"
                             onClick={() => {
-                              setIsMenuOpen(false)
-                              closeDropdowns()
+                              setIsMenuOpen(false);
+                              closeDropdowns();
                             }}
                           >
                             <div className="flex-shrink-0 mt-0.5">
@@ -496,7 +583,7 @@ const Navber = () => {
                               </p>
                             </div>
                           </Link>
-                        )
+                        );
                       })}
                     </div>
                   )}
@@ -538,7 +625,7 @@ const Navber = () => {
         />
       )} */}
     </nav>
-  )
-}
+  );
+};
 
-export default Navber
+export default Navber;

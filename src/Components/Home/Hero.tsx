@@ -13,7 +13,7 @@ import {
 
 const Hero = () => {
   const stats = [
-    { number: '500+', label: 'Active Members' },
+    { number: '5000+', label: 'Active Members' },
     { number: '50+', label: 'Community Events' },
     { number: '15+', label: 'Years of Service' },
     { number: '100%', label: 'Community Focus' }
@@ -99,7 +99,7 @@ const Hero = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <Link 
-                href="/membership-form"
+                href="/services/membership-form"
                 className="group inline-flex items-center justify-center px-6 py-3 bg-primary hover:to-primary-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <span>Join Our Community</span>
@@ -107,7 +107,7 @@ const Hero = () => {
               </Link>
               
               <Link 
-                href="/about/story"
+                href="/about"
                 className="group inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:border-primary dark:hover:border-primary-400 text-gray-900 dark:text-gray-100 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <span>Learn More</span>

@@ -8,11 +8,9 @@ import {
   MapPinIcon,
   ClockIcon,
   UsersIcon,
-  ArrowRightIcon,
   TrophyIcon,
   SparklesIcon,
   CheckCircleIcon,
-  EyeIcon
 } from '@heroicons/react/24/outline'
 
 interface Event {
@@ -137,7 +135,7 @@ const Events = () => {
   const events = activeTab === 'upcoming' ? upcomingEvents : completedEvents
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white dark:bg-gray-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -264,7 +262,7 @@ const Events = () => {
                 )}
 
                 {/* Action Button */}
-                <div className="flex space-x-3">
+                {/* <div className="flex space-x-3">
                   {event.status === 'upcoming' ? (
                     <button className="flex-1 bg-primary hover:bg-primary-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
                       <span>Register Now</span>
@@ -276,7 +274,7 @@ const Events = () => {
                       <span>View Gallery</span>
                     </button>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           ))}
@@ -284,7 +282,7 @@ const Events = () => {
 
         {/* Bottom CTA */}
         <div className="text-center">
-          <div className="bg-primary-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
               Want to Organize an Event?
             </h3>
