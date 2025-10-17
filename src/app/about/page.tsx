@@ -2,88 +2,16 @@
 
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { 
   BookOpenIcon,
   ClockIcon,
-  HeartIcon,
   ArrowRightIcon,
-  TrophyIcon,
-  CalendarDaysIcon,
   UserPlusIcon
 } from '@heroicons/react/24/outline'
+import { regularActivitiesData } from '@/lib/regularActivitiesData'
 
 const About = () => {
-  const activities = [
-    {
-      title: 'Community Development',
-      description: 'Building stronger neighborhoods through collaborative projects and initiatives.',
-      icon: HeartIcon,
-      stats: '25+ Projects'
-    },
-    {
-      title: 'Cultural Events',
-      description: 'Celebrating diversity and fostering cultural understanding in our community.',
-      icon: CalendarDaysIcon,
-      stats: '50+ Events'
-    },
-    {
-      title: 'Educational Programs',
-      description: 'Providing learning opportunities and skill development for all ages.',
-      icon: BookOpenIcon,
-      stats: '15+ Programs'
-    },
-    {
-      title: 'Health & Wellness',
-      description: 'Promoting healthy living and wellness initiatives for community members.',
-      icon: HeartIcon,
-      stats: '10+ Initiatives'
-    }
-  ]
-
-  const achievements = [
-    {
-      year: '2008',
-      title: 'Foundation',
-      description: 'Gulshan Society was established with a vision to create a vibrant community.'
-    },
-    {
-      year: '2012',
-      title: 'Community Center',
-      description: 'Opened our first community center to serve as a hub for activities.'
-    },
-    {
-      year: '2018',
-      title: 'Digital Transformation',
-      description: 'Launched online services and digital platforms for better member engagement.'
-    },
-    {
-      year: '2024',
-      title: 'Modern Facilities',
-      description: 'Completed major infrastructure upgrades and modern amenities.'
-    }
-  ]
-
-  const team = [
-    {
-      name: 'Dr. Ahmed Hassan',
-      position: 'President',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-      description: 'Leading our community with 15+ years of experience in community development.'
-    },
-    {
-      name: 'Fatima Rahman',
-      position: 'Vice President',
-      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-      description: 'Passionate about community welfare and member engagement initiatives.'
-    },
-    {
-      name: 'Mohammad Ali',
-      position: 'Secretary',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-      description: 'Ensuring smooth operations and maintaining community records.'
-    }
-  ]
+ 
 
   return (
     <div className="min-h-screen bg-white">
@@ -131,15 +59,15 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Our <span className="text-primary">Activities</span>
+            গুলশান সোসাইটির <span className="text-primary">নিয়মিত কার্যক্রম</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover the diverse range of activities and initiatives that make our community vibrant and connected.
+            <p className="text-lg text-gray-600">
+            গুলশানকে একটি নিরাপদ ও পরিচ্ছন্ন এলাকায় পরিণত করা, ট্রাফিক-ব্যবস্থাকে সহনীয় পর্যায়ে রাখা, বিদ্যুত-পানি-গ্যাসের নিরবচ্ছিন্ন সরবরাহ নিশ্চিত করা, অধিবাসীদের হয়রানিমুক্ত জীবনযাপন নিশ্চিত করা ইত্যাদির লক্ষ্যে ঢাকা উত্তর সিটি কর্পোরেশন, ঢাকা মেট্রোপলিটন পুলিশ, রাজউক, ডেসকো, ওয়াসা, তিতাস ও অন্যান্য কর্তৃপক্ষের সাথে গুলশান সোসাইটি অধিবাসীদের পক্ষে সার্বক্ষণিক ভাবে যোগাযোগ বজায় রাখছে এবং পাবলিক-প্রাইভেট পার্টনারশিপের আওতায় বিভিন্ন প্রয়োজনীয় পদক্ষেপ গ্রহণ করেছে।
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {activities.map((activity, index) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {regularActivitiesData.map((activity, index) => {
               const IconComponent = activity.icon
               return (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200">
@@ -148,16 +76,12 @@ const About = () => {
                   </div>
                   
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
-                    {activity.title}
+                    {activity.name}
                   </h3>
                   
                   <p className="text-gray-600 mb-4">
                     {activity.description}
                   </p>
-                  
-                  <div className="text-primary font-semibold text-sm">
-                    {activity.stats}
-                  </div>
                 </div>
               )
             })}
@@ -165,91 +89,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Our <span className="text-primary">Journey</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Key milestones in our community&apos;s growth and development over the years.
-            </p>
-          </div>
-
-          <div className="relative">
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-primary-200"></div>
-            
-            <div className="space-y-12">
-              {achievements.map((achievement, index) => (
-                <div key={index} className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
-                  <div className="w-1/2 px-8">
-                    <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
-                      <div className="text-primary font-bold text-2xl mb-2">
-                        {achievement.year}
-                      </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">
-                        {achievement.title}
-                      </h3>
-                      <p className="text-gray-600">
-                        {achievement.description}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="w-8 h-8 bg-primary rounded-full border-4 border-white shadow-lg flex items-center justify-center z-10">
-                    <TrophyIcon className="w-4 h-4 text-white" />
-                  </div>
-                  
-                  <div className="w-1/2 px-8"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Team Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Leadership <span className="text-primary">Team</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Meet the dedicated leaders who guide our community with vision and commitment.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="bg-white rounded-2xl shadow-lg p-6 text-center hover:shadow-xl transition-all duration-300 border border-gray-200">
-                <div className="relative w-32 h-32 mx-auto mb-6">
-                  <Image 
-                    src={member.image}
-                    alt={member.name}
-                    width={128}
-                    height={128}
-                    className="w-full h-full object-cover rounded-full border-4 border-primary-100"
-                  />
-                </div>
-                
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  {member.name}
-                </h3>
-                
-                <div className="text-primary font-semibold mb-3">
-                  {member.position}
-                </div>
-                
-                <p className="text-gray-600 text-sm">
-                  {member.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-16 bg-primary">

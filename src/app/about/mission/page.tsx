@@ -1,85 +1,47 @@
-'use client'
+"use client";
 
-import React from 'react'
-import Link from 'next/link'
-import { 
+import React from "react";
+import Link from "next/link";
+import {
   GlobeAltIcon,
   HeartIcon,
-  LightBulbIcon,
   ArrowRightIcon,
   SparklesIcon,
-  ShieldCheckIcon,
-  AcademicCapIcon,
-  HandRaisedIcon,
-  UserGroupIcon
-} from '@heroicons/react/24/outline'
+  UserGroupIcon,
+} from "@heroicons/react/24/outline";
+import { futurePlan } from "@/lib/regularActivitiesData";
 
 const Mission = () => {
-  const values = [
-    {
-      title: 'Community First',
-      description: 'We prioritize the well-being and development of our community members above all else.',
-      icon: HeartIcon,
-      color: 'text-red-500'
-    },
-    {
-      title: 'Inclusive Growth',
-      description: 'We believe in creating opportunities for everyone to grow and succeed together.',
-      icon: UserGroupIcon,
-      color: 'text-blue-500'
-    },
-    {
-      title: 'Innovation',
-      description: 'We embrace new ideas and technologies to improve our community services.',
-      icon: LightBulbIcon,
-      color: 'text-yellow-500'
-    },
-    {
-      title: 'Transparency',
-      description: 'We maintain open communication and accountability in all our activities.',
-      icon: ShieldCheckIcon,
-      color: 'text-green-500'
-    },
-    {
-      title: 'Education',
-      description: 'We promote lifelong learning and skill development for all members.',
-      icon: AcademicCapIcon,
-      color: 'text-purple-500'
-    },
-    {
-      title: 'Service',
-      description: 'We are committed to serving our community with dedication and excellence.',
-      icon: HandRaisedIcon,
-      color: 'text-orange-500'
-    }
-  ]
-
   const goals = [
     {
-      title: 'Community Development',
-      description: 'Foster a thriving, connected community where every member feels valued and supported.',
+      title: "Community Development",
+      description:
+        "Foster a thriving, connected community where every member feels valued and supported.",
       icon: UserGroupIcon,
-      timeline: 'Ongoing'
+      timeline: "Ongoing",
     },
     {
-      title: 'Digital Transformation',
-      description: 'Modernize our services and communication to better serve our members.',
+      title: "Digital Transformation",
+      description:
+        "Modernize our services and communication to better serve our members.",
       icon: GlobeAltIcon,
-      timeline: '2024-2025'
+      timeline: "2024-2025",
     },
     {
-      title: 'Sustainability',
-      description: 'Implement eco-friendly practices and green initiatives throughout our community.',
+      title: "Sustainability",
+      description:
+        "Implement eco-friendly practices and green initiatives throughout our community.",
       icon: HeartIcon,
-      timeline: '2025-2026'
+      timeline: "2025-2026",
     },
     {
-      title: 'Youth Engagement',
-      description: 'Create more opportunities for young people to participate in community activities.',
+      title: "Youth Engagement",
+      description:
+        "Create more opportunities for young people to participate in community activities.",
       icon: SparklesIcon,
-      timeline: '2024-2027'
-    }
-  ]
+      timeline: "2024-2027",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-white">
@@ -91,14 +53,14 @@ const Mission = () => {
               <GlobeAltIcon className="w-4 h-4" />
               <span>Mission & Vision</span>
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
               Our <span className="text-primary">Mission</span> & Vision
             </h1>
-            
+
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Discover the guiding principles and aspirations that drive our community forward, 
-              creating a better tomorrow for all our members.
+              Discover the guiding principles and aspirations that drive our
+              community forward, creating a better tomorrow for all our members.
             </p>
           </div>
         </div>
@@ -113,24 +75,26 @@ const Mission = () => {
                 Our <span className="text-primary">Mission</span>
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                To create a vibrant, inclusive, and sustainable community where every member 
-                can thrive, grow, and contribute to the collective well-being of our society.
+                To create a vibrant, inclusive, and sustainable community where
+                every member can thrive, grow, and contribute to the collective
+                well-being of our society.
               </p>
               <p className="text-lg text-gray-600 mb-8">
-                We are committed to fostering strong relationships, promoting cultural diversity, 
-                and providing essential services that enhance the quality of life for all our members.
+                We are committed to fostering strong relationships, promoting
+                cultural diversity, and providing essential services that
+                enhance the quality of life for all our members.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
+                <Link
                   href="/about/history"
                   className="inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 >
                   <span>Our History</span>
                   <ArrowRightIcon className="ml-2 w-4 h-4" />
                 </Link>
-                
-                <Link 
+
+                <Link
                   href="/about/previous-ec"
                   className="inline-flex items-center justify-center px-6 py-3 bg-white border-2 border-primary hover:border-primary-800 text-primary hover:text-primary-800 font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 >
@@ -138,7 +102,7 @@ const Mission = () => {
                 </Link>
               </div>
             </div>
-            
+
             <div className="bg-primary-50 rounded-2xl p-8">
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-primary rounded-full mb-6">
@@ -148,8 +112,9 @@ const Mission = () => {
                   Building Community Together
                 </h3>
                 <p className="text-gray-600">
-                  Every initiative, every event, and every service we provide is designed 
-                  to strengthen the bonds within our community and create lasting positive impact.
+                  Every initiative, every event, and every service we provide is
+                  designed to strengthen the bonds within our community and
+                  create lasting positive impact.
                 </p>
               </div>
             </div>
@@ -166,12 +131,14 @@ const Mission = () => {
             </h2>
             <div className="max-w-4xl mx-auto">
               <p className="text-xl text-gray-600 mb-6">
-                To be the leading community organization that sets the standard for 
-                inclusive growth, sustainable development, and member satisfaction.
+                To be the leading community organization that sets the standard
+                for inclusive growth, sustainable development, and member
+                satisfaction.
               </p>
               <p className="text-lg text-gray-600">
-                We envision a future where Gulshan Society serves as a model community 
-                that other organizations look to for inspiration and best practices.
+                We envision a future where Gulshan Society serves as a model
+                community that other organizations look to for inspiration and
+                best practices.
               </p>
             </div>
           </div>
@@ -183,32 +150,29 @@ const Mission = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Core <span className="text-primary">Values</span>
+            গুলশান সোসাইটির <span className="text-primary">ভবিষ্যৎ পরিকল্পনা            </span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              The fundamental principles that guide our decisions and shape our community culture.
+            <p className=" text-gray-600 max-w-2xl mx-auto">
+            গুলশান সোসাইটির ভবিষ্যৎ পরিকল্পনা, যা আমাদের নির্ণায়ক নীতি এবং আমাদের সম্প্রদায়ের মানবতাকে নির্ধারণ করে।
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {values.map((value, index) => {
-              const IconComponent = value.icon
+            {futurePlan.map((value, index) => {
+              const IconComponent = value.icon;
               return (
-                <div key={index} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200">
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className={`p-3 rounded-xl bg-gray-50`}>
-                      <IconComponent className={`w-6 h-6 ${value.color}`} />
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200"
+                >
+                  <div className="flex items-start space-x-4 mb-4">
+                    <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
+                      <IconComponent className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">
-                      {value.title}
-                    </h3>
+                    <p className="text-gray-600 flex-1">{value.description}</p>
                   </div>
-                  
-                  <p className="text-gray-600">
-                    {value.description}
-                  </p>
                 </div>
-              )
+              );
             })}
           </div>
         </div>
@@ -222,22 +186,26 @@ const Mission = () => {
               Strategic <span className="text-primary">Goals</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Our roadmap for the future, outlining key objectives and milestones we aim to achieve.
+              Our roadmap for the future, outlining key objectives and
+              milestones we aim to achieve.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {goals.map((goal, index) => {
-              const IconComponent = goal.icon
+              const IconComponent = goal.icon;
               return (
-                <div key={index} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200">
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200"
+                >
                   <div className="flex items-start space-x-4">
                     <div className="flex-shrink-0">
                       <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
                         <IconComponent className="w-6 h-6 text-primary" />
                       </div>
                     </div>
-                    
+
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="text-xl font-bold text-gray-900">
@@ -247,14 +215,12 @@ const Mission = () => {
                           {goal.timeline}
                         </span>
                       </div>
-                      
-                      <p className="text-gray-600">
-                        {goal.description}
-                      </p>
+
+                      <p className="text-gray-600">{goal.description}</p>
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         </div>
@@ -267,19 +233,20 @@ const Mission = () => {
             Be Part of Our Mission
           </h2>
           <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-            Join us in building a stronger, more connected community where everyone can thrive.
+            Join us in building a stronger, more connected community where
+            everyone can thrive.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
+            <Link
               href="/services/membership-form"
               className="inline-flex items-center justify-center px-8 py-3 bg-white text-primary font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
             >
               <UserGroupIcon className="mr-2 w-4 h-4" />
               <span>Join Our Community</span>
             </Link>
-            
-            <Link 
+
+            <Link
               href="/about"
               className="inline-flex items-center justify-center px-8 py-3 border-2 border-white text-white hover:bg-white hover:text-primary font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
             >
@@ -289,7 +256,7 @@ const Mission = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default Mission
+export default Mission;
