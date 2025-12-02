@@ -9,7 +9,7 @@ import {
   ClockIcon,
   HeartIcon,
   UserGroupIcon,
-  HomeIcon,
+  // HomeIcon,
   DocumentTextIcon,
   CalendarDaysIcon,
   PhotoIcon,
@@ -129,7 +129,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link 
-                  href="/services/membership-form" 
+                  href="/membership-form" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <UserGroupIcon className="w-4 h-4" />
@@ -142,10 +142,10 @@ const Footer = () => {
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <DocumentTextIcon className="w-4 h-4" />
-                  <span>Car Registration</span>
+                  <span>Car Sticker Application</span>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link 
                   href="/services/house-registration" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
@@ -153,8 +153,8 @@ const Footer = () => {
                   <HomeIcon className="w-4 h-4" />
                   <span>House Registration</span>
                 </Link>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <Link 
                   href="/services/maintenance-support" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
@@ -162,23 +162,32 @@ const Footer = () => {
                   <HeartIcon className="w-4 h-4" />
                   <span>Maintenance Support</span>
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link 
-                  href="/services/security-services" 
+                  href="/services/Adopt-a-Road" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <HeartIcon className="w-4 h-4" />
-                  <span>Security Services</span>
+                  <span>Adopt a Road</span>
                 </Link>
               </li>
               <li>
                 <Link 
-                  href="/services/utility-management" 
+                  href="/services/Adopt-a-Gate" 
                   className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
                 >
                   <HeartIcon className="w-4 h-4" />
-                  <span>Utility Management</span>
+                  <span>Adopt a Gate</span>
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/admin" 
+                  className="text-gray-300 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
+                >
+                  <HeartIcon className="w-4 h-4" />
+                  <span>Admin Dashboard</span>
                 </Link>
               </li>
             </ul>

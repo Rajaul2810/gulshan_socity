@@ -4,7 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { 
   BookOpenIcon,
-  ClockIcon,
+  // ClockIcon,
   ArrowRightIcon,
   UserPlusIcon
 } from '@heroicons/react/24/outline'
@@ -42,13 +42,13 @@ const About = () => {
                 <ArrowRightIcon className="ml-2 w-4 h-4" />
               </Link>
               
-              <Link 
+              {/* <Link 
                 href="/about/history"
                 className="inline-flex items-center justify-center px-8 py-3 bg-white border-2 border-primary hover:border-primary-800 text-primary hover:text-primary-800 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <ClockIcon className="mr-2 w-4 h-4" />
                 <span>Our History</span>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -102,7 +102,7 @@ const About = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
-              href="/services/membership-form"
+              href="/membership-form"
               className="inline-flex items-center justify-center px-8 py-3 bg-white text-primary font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
             >
               <UserPlusIcon className="mr-2 w-4 h-4" />

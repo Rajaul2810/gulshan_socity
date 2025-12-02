@@ -11,19 +11,16 @@ import {
   ComputerDesktopIcon,
   BookOpenIcon,
   UserGroupIcon,
-  ClockIcon,
   UserPlusIcon,
   UsersIcon,
   CogIcon,
   HeartIcon,
   HandRaisedIcon,
-  IdentificationIcon,
   DocumentCheckIcon,
   BuildingOffice2Icon,
   UserIcon,
   GlobeAltIcon,
   QuestionMarkCircleIcon,
-  TicketIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
@@ -123,13 +120,13 @@ const Navber = () => {
         description:
           "See the list of earlier Executive Committee members who led the society.",
       },
-      {
-        name: "History",
-        href: "/about/history",
-        icon: ClockIcon,
-        description:
-          "Explore our foundation, mileposts, and the legacy of the organization.",
-      },
+      // {
+      //   name: "History",
+      //   href: "/about/history",
+      //   icon: ClockIcon,
+      //   description:
+      //     "Explore our foundation, mileposts, and the legacy of the organization.",
+      // },
     ],
     membership: [
       {
@@ -138,6 +135,13 @@ const Navber = () => {
         icon: UsersIcon,
         description:
           "View comprehensive list of all registered society members.",
+      },
+      {
+        name: "Membership Registration",
+        href: "/membership-form",
+        icon: UserPlusIcon,
+        description:
+          "Register yourself or your family as members of the society.",
       },
       {
         name: "Member Services",
@@ -159,13 +163,13 @@ const Navber = () => {
         icon: DocumentCheckIcon,
         description: "Rules and guidelines for all members and stakeholders.",
       },
-      {
-        name: "Departed Members",
-        href: "/departed-member",
-        icon: IdentificationIcon,
-        description:
-          "Honoring the memory of those who were part of our community.",
-      },
+      // {
+      //   name: "Departed Members",
+      //   href: "/departed-member",
+      //   icon: IdentificationIcon,
+      //   description:
+      //     "Honoring the memory of those who were part of our community.",
+      // },
     ],
     services: [
       {
@@ -175,13 +179,7 @@ const Navber = () => {
         description:
           "Browse the full range of services Gulshan Society offers.",
       },
-      {
-        name: "Membership Registration",
-        href: "/services/membership-form",
-        icon: UserPlusIcon,
-        description:
-          "Register yourself or your family as members of the society.",
-      },
+      
       {
         name: "Car Sticker Application",
         href: "/services/car-registration",
@@ -189,23 +187,17 @@ const Navber = () => {
         description: "Apply for a car sticker to access the residential area.",
       },
       {
-        name: "Complaint Form",
-        href: "/services/complaint-form",
+        name: "Adopt a Road",
+        href: "/services/Adopt-a-Road",
         icon: BuildingOffice2Icon,
-        description: "Submit a complaint form to the society.",
+        description: "Adopt a road to maintain and keep it clean.",
       },
       {
-        name: "Inquiry Form",
-        href: "/services/inquiry-form",
+        name: "Adopt a Gate",
+        href: "/services/Adopt-a-Gate",
         icon: QuestionMarkCircleIcon,
-        description: "Submit an inquiry form to the society.",
-      },
-      {
-        name: "Event Ticket Application",
-        href: "/services/event-ticket-application",
-        icon: TicketIcon,
-        description: "Apply for a ticket to attend an event.",
-      },
+        description: "Adopt a gate to maintain and keep it secure.",
+      }
     ],
   };
 
@@ -297,7 +289,7 @@ const Navber = () => {
                 onClick={() => toggleDropdown("membership")}
                 className="flex items-center space-x-1 text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
               >
-                <span>Membership</span>
+                <span>Member Directory</span>
                 <ChevronDownIcon
                   className={`w-4 h-4 transition-transform duration-200 ${
                     activeDropdown === "membership" ? "rotate-180" : ""
@@ -501,7 +493,7 @@ const Navber = () => {
                     }
                     className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 focus:text-primary-600 dark:focus:text-primary-400 active:text-primary-600 dark:active:text-primary-400 focus:outline-none focus:bg-gray-50 dark:focus:bg-gray-700 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200"
                   >
-                    Membership
+                    Member Directory
                     <ChevronDownIcon
                       className={`w-4 h-4 transition-transform duration-200 ${
                         activeDropdown === "membership" ? "rotate-180" : ""

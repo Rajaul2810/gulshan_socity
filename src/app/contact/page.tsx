@@ -46,8 +46,27 @@ const Contact = () => {
     e.preventDefault();
     setFormStatus("submitting");
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          category: formData.category,
+          message: formData.message,
+          preferredContact: formData.preferredContact,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
       setFormStatus("success");
       setFormData({
         name: "",
@@ -59,7 +78,14 @@ const Contact = () => {
         preferredContact: "email",
         termsAccepted: false,
       });
-    }, 2000);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      setFormStatus("error");
+      // Reset to idle after showing error
+      setTimeout(() => {
+        setFormStatus("idle");
+      }, 3000);
+    }
   };
 
 
@@ -193,6 +219,22 @@ const Contact = () => {
                       </h3>
                       <p className="text-green-700 dark:text-green-400 text-sm">
                         We&apos;ll get back to you within 24 hours.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {formStatus === "error" && (
+                <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+                  <div className="flex items-center space-x-3">
+                    <ExclamationTriangleIcon className="w-6 h-6 text-red-600" />
+                    <div>
+                      <h3 className="text-red-800 dark:text-red-300 font-semibold">
+                        Failed to Send Message
+                      </h3>
+                      <p className="text-red-700 dark:text-red-400 text-sm">
+                        Please try again later or contact us directly.
                       </p>
                     </div>
                   </div>

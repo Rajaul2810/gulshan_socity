@@ -3,113 +3,20 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useEvents } from '@/hooks/useEvents'
 import { 
   CalendarDaysIcon,
   MapPinIcon,
   ClockIcon,
-  UsersIcon,
   TrophyIcon,
   SparklesIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline'
 
-interface Event {
-  id: number
-  title: string
-  description: string
-  date: string
-  time: string
-  location: string
-  attendees: number
-  image: string
-  category: string
-  status: 'upcoming' | 'completed'
-  highlights?: string[]
-}
-
 const Events = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'completed'>('upcoming')
-
-  const upcomingEvents: Event[] = [
-    {
-      id: 1,
-      title: 'Community Cultural Festival',
-      description: 'Join us for a vibrant celebration of our diverse community culture with food, music, and traditional performances.',
-      date: '2024-02-15',
-      time: '6:00 PM - 10:00 PM',
-      location: 'Gulshan Community Center',
-      attendees: 150,
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&h=300&fit=crop',
-      category: 'Cultural',
-      status: 'upcoming' as const
-    },
-    {
-      id: 2,
-      title: 'Health & Wellness Workshop',
-      description: 'Learn about healthy living practices, nutrition, and fitness routines from certified health professionals.',
-      date: '2024-02-22',
-      time: '10:00 AM - 2:00 PM',
-      location: 'Gulshan Health Center',
-      attendees: 80,
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop',
-      category: 'Health',
-      status: 'upcoming'
-    },
-    {
-      id: 3,
-      title: 'Tech Meetup & Networking',
-      description: 'Connect with fellow tech enthusiasts, share knowledge, and explore the latest technology trends.',
-      date: '2024-03-01',
-      time: '7:00 PM - 9:00 PM',
-      location: 'Gulshan Innovation Hub',
-      attendees: 60,
-      image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=500&h=300&fit=crop',
-      category: 'Technology',
-      status: 'upcoming'
-    }
-  ]
-
-  const completedEvents: Event[] = [
-    {
-      id: 4,
-      title: 'Annual Community Meeting',
-      description: 'Our yearly gathering to discuss community development, upcoming projects, and member feedback.',
-      date: '2024-01-20',
-      time: '2:00 PM - 5:00 PM',
-      location: 'Gulshan Community Center',
-      attendees: 200,
-      image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&h=300&fit=crop',
-      category: 'Community',
-      status: 'completed',
-      highlights: ['New playground approved', 'Security system upgrade', 'Member feedback collected']
-    },
-    {
-      id: 5,
-      title: 'Children\'s Art Exhibition',
-      description: 'Showcasing creative artworks by our talented young community members.',
-      date: '2024-01-10',
-      time: '11:00 AM - 4:00 PM',
-      location: 'Gulshan Art Gallery',
-      attendees: 120,
-      image: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=500&h=300&fit=crop',
-      category: 'Art',
-      status: 'completed',
-      highlights: ['50+ artworks displayed', 'Young artist awards', 'Community appreciation']
-    },
-    {
-      id: 6,
-      title: 'Winter Sports Tournament',
-      description: 'Friendly competition featuring cricket, football, and badminton matches.',
-      date: '2024-01-05',
-      time: '9:00 AM - 6:00 PM',
-      location: 'Gulshan Sports Complex',
-      attendees: 180,
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop',
-      category: 'Sports',
-      status: 'completed',
-      highlights: ['Cricket champions crowned', 'Football tournament completed', 'Badminton finals held']
-    }
-  ]
+  const { events: upcomingEvents, loading: upcomingLoading } = useEvents('upcoming')
+  const { events: completedEvents, loading: completedLoading } = useEvents('completed')
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -120,7 +27,7 @@ const Events = () => {
     })
   }
 
-  const getCategoryColor = (category: string) => {
+  const getCategoryColor = (tag: string) => {
     const colors: { [key: string]: string } = {
       'Cultural': 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
       'Health': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
@@ -129,10 +36,11 @@ const Events = () => {
       'Art': 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300',
       'Sports': 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
     }
-    return colors[category] || 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
+    return colors[tag] || 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
   }
 
   const events = activeTab === 'upcoming' ? upcomingEvents : completedEvents
+  const loading = activeTab === 'upcoming' ? upcomingLoading : completedLoading
 
   return (
     <section className="py-16 bg-white dark:bg-gray-950">
@@ -182,103 +90,105 @@ const Events = () => {
         </div>
 
         {/* Events Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {events.map((event) => (
-            <div 
-              key={event.id}
-              className="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
-            >
-              {/* Event Image */}
-              <div className="relative h-48 overflow-hidden">
-                <Image 
-                  src={event.image} 
-                  alt={event.title}
-                  width={500}
-                  height={300}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                <div className="absolute top-4 left-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(event.category)}`}>
-                    {event.category}
-                  </span>
-                </div>
-                {event.status === 'completed' && (
-                  <div className="absolute top-4 right-4">
-                    <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1">
-                      <CheckCircleIcon className="w-4 h-4" />
-                      <span>Completed</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Event Content */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary dark:group-hover:text-blue-400 transition-colors duration-300">
-                  {event.title}
-                </h3>
-                
-                <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed">
-                  {event.description}
-                </p>
-
-                {/* Event Details */}
-                <div className="space-y-3 mb-4">
-                  <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                    <CalendarDaysIcon className="w-4 h-4 text-blue-500" />
-                    <span>{formatDate(event.date)}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                    <ClockIcon className="w-4 h-4 text-green-500" />
-                    <span>{event.time}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                    <MapPinIcon className="w-4 h-4 text-red-500" />
-                    <span>{event.location}</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                    <UsersIcon className="w-4 h-4 text-purple-500" />
-                    <span>{event.attendees} attendees</span>
-                  </div>
-                </div>
-
-                {/* Event Highlights for Completed Events */}
-                {event.status === 'completed' && 'highlights' in event && (
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">Event Highlights:</h4>
-                    <div className="space-y-1">
-                      {event.highlights?.map((highlight: string, index: number) => (
-                        <div key={index} className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
-                          <CheckCircleIcon className="w-3 h-3 text-green-500 flex-shrink-0" />
-                          <span>{highlight}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Action Button */}
-                {/* <div className="flex space-x-3">
-                  {event.status === 'upcoming' ? (
-                    <button className="flex-1 bg-primary hover:bg-primary-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
-                      <span>Register Now</span>
-                      <ArrowRightIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                    </button>
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading events...</p>
+          </div>
+        ) : events.length === 0 ? (
+          <div className="text-center py-12">
+            <CalendarDaysIcon className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+            <p className="text-gray-600 dark:text-gray-400">
+              No {activeTab === 'upcoming' ? 'upcoming' : 'completed'} events at the moment.
+            </p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {events.map((event) => (
+              <div 
+                key={event.id}
+                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
+              >
+                {/* Event Image */}
+                <div className="relative h-48 overflow-hidden">
+                  {event.image ? (
+                    <Image 
+                      src={event.image} 
+                      alt={event.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      unoptimized
+                    />
                   ) : (
-                    <button className="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
-                      <EyeIcon className="w-4 h-4" />
-                      <span>View Gallery</span>
-                    </button>
+                    <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+                      <CalendarDaysIcon className="w-16 h-16 text-gray-400" />
+                    </div>
                   )}
-                </div> */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  {event.tag && (
+                    <div className="absolute top-4 left-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(event.tag)}`}>
+                        {event.tag}
+                      </span>
+                    </div>
+                  )}
+                  {event.status === 'completed' && (
+                    <div className="absolute top-4 right-4">
+                      <div className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1">
+                        <CheckCircleIcon className="w-4 h-4" />
+                        <span>Completed</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Event Content */}
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary dark:group-hover:text-blue-400 transition-colors duration-300">
+                    {event.title}
+                  </h3>
+                  
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed line-clamp-3">
+                    {event.description}
+                  </p>
+
+                  {/* Event Details */}
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                      <CalendarDaysIcon className="w-4 h-4 text-blue-500" />
+                      <span>{formatDate(event.date)}</span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                      <ClockIcon className="w-4 h-4 text-green-500" />
+                      <span>{event.time}</span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
+                      <MapPinIcon className="w-4 h-4 text-red-500" />
+                      <span>{event.location}</span>
+                    </div>
+                  </div>
+
+                  {/* Event Highlights for Completed Events */}
+                  {event.status === 'completed' && event.highlights && event.highlights.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">Event Highlights:</h4>
+                      <div className="space-y-1">
+                        {event.highlights.map((highlight: string, index: number) => (
+                          <div key={index} className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
+                            <CheckCircleIcon className="w-3 h-3 text-green-500 flex-shrink-0" />
+                            <span>{highlight}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Bottom CTA */}
         <div className="text-center">
@@ -292,14 +202,14 @@ const Events = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                href="/events/create"
+                href="/contact"
                 className="inline-flex items-center justify-center px-8 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <SparklesIcon className="mr-2 w-4 h-4" />
-                <span>Propose Event</span>
+                <span>Contact Us</span>
               </Link>
               <Link 
-                href="/events"
+                href="/event-page"
                 className="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:border-primary text-gray-900 dark:text-gray-100 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <CalendarDaysIcon className="mr-2 w-4 h-4" />

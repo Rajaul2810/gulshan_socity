@@ -401,11 +401,11 @@ const Media = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                href="/media/submit"
+                href="/contact"
                 className="inline-flex items-center justify-center px-8 py-3 bg-gradient-primary hover:bg-gradient-primary-dark text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <PhotoIcon className="mr-2 w-4 h-4" />
-                <span>Submit Content</span>
+                <span>Contact Us</span>
               </Link>
               <Link 
                 href="/media"

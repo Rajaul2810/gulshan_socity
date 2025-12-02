@@ -67,7 +67,7 @@ const Hero = () => {
             {/* Main Heading */}
             <div className="space-y-3">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-                <span className="bg-primary bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-500 dark:to-primary-300">
+                <span className="bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-500 dark:to-primary-300">
                   Gulshan Society
                 </span>
                 <br />
@@ -99,8 +99,8 @@ const Hero = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <Link 
-                href="/services/membership-form"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-primary hover:to-primary-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                href="/membership-form"
+                className="group inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               >
                 <span>Join Our Community</span>
                 <ArrowRightIcon className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -175,7 +175,7 @@ const Hero = () => {
         <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <div key={index} className="text-center group">
-              <div className="text-2xl md:text-3xl font-bold bg-primary bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
+              <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300">
                 {stat.number}
               </div>
               <div className="text-gray-600 dark:text-gray-400 mt-1 text-sm font-medium">

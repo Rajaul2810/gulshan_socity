@@ -1,26 +1,27 @@
 @import "tailwindcss";
-@import "../styles/colors.css";
+/* @import "../styles/colors.css"; */
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@theme {
-  --color-primary-50: #FDF2F0;
-  --color-primary-100: #FCE4E0;
-  --color-primary-200: #F8C9C0;
-  --color-primary-300: #F4AEA0;
-  --color-primary-400: #F09380;
-  --color-primary-500: #EC7860;
-  --color-primary-600: #E85D40;
-  --color-primary-700: #D44A2C;
-  --color-primary-800: #B83D25;
-  --color-primary-900: #9C301E;
-  --color-primary: #803E2E;
-  --color-primary-light: #A55A4A;
-  --color-primary-dark: #6B2F1F;
+@theme{
+  --color-primary-50: oklch(98.2% 0.018 155.826);
+  --color-primary-100: oklch(96.2% 0.044 156.743);
+  --color-primary-200: oklch(92.5% 0.084 155.995);
+  --color-primary-300: oklch(87.1% 0.15 154.449);
+  --color-primary-400: oklch(79.2% 0.209 151.711);
+  --color-primary-500: oklch(72.3% 0.219 149.579);
+  --color-primary-600: oklch(62.7% 0.194 149.214);
+  --color-primary-700: oklch(52.7% 0.154 150.069);
+  --color-primary-800: oklch(44.8% 0.119 151.328);
+  --color-primary-900: oklch(39.3% 0.095 152.535);
+  --color-primary-950: oklch(26.6% 0.065 152.934);
+  --color-primary: oklch(52.7% 0.154 150.069);
+  --color-primary-light: oklch(62.7% 0.194 149.214);
+  --color-primary-dark: oklch(72.3% 0.219 149.579);
   
-  --color-secondary: #2D3748;
-  --color-secondary-light: #4A5568;
-  --color-secondary-dark: #1A202C;
+  --color-secondary: oklch(87.1% 0.15 154.449);
+  --color-secondary-light: oklch(92.5% 0.084 155.995);
+  --color-secondary-dark: oklch(96.2% 0.044 156.743);
   
   --color-success: #10B981;
   --color-warning: #F59E0B;

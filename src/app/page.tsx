@@ -4,6 +4,7 @@ import Services from "@/Components/Home/Services";
 import Events from "@/Components/Home/Events";
 import Media from "@/Components/Home/Media";
 import TeamStats from "@/Components/Home/TeamStats";
+import News from "@/Components/Home/News";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <Hero />
       <Services />
       <Events />
+      <News />
       <TeamStats />
       <Media />
     </div>

@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Sora } from "next/font/google";
 import "./globals.css";
-import Navber from "@/Components/Layout/Navber";
-import Footer from "@/Components/Layout/Footer";
+import ConditionalLayout from "@/Components/Layout/ConditionalLayout";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -25,9 +24,9 @@ export default function RootLayout({
       <body
         className={`${sora.variable} antialiased`}
       >
-        <Navber />
-        {children}
-        <Footer />
+        <ConditionalLayout>
+          {children}
+        </ConditionalLayout>
       </body>
     </html>
   );
