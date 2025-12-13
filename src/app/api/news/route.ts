@@ -4,6 +4,25 @@ import { supabaseServer } from '@/lib/supabase/server'
 // GET all news articles
 export async function GET(request: NextRequest) {
   try {
+    // Validate Supabase configuration
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (!supabaseUrl) {
+      console.error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
+      return NextResponse.json(
+        { data: null, error: 'Server configuration error: Missing Supabase URL. Please check your .env.local file.' },
+        { status: 500 }
+      )
+    }
+
+    // Validate URL format
+    if (!supabaseUrl.includes('supabase.co') && !supabaseUrl.includes('supabase')) {
+      console.error('Invalid Supabase URL format:', supabaseUrl)
+      return NextResponse.json(
+        { data: null, error: 'Invalid Supabase URL format. Please verify your NEXT_PUBLIC_SUPABASE_URL in .env.local' },
+        { status: 500 }
+      )
+    }
+
     const searchParams = request.nextUrl.searchParams
     const status = searchParams.get('status')
 
@@ -18,13 +37,46 @@ export async function GET(request: NextRequest) {
 
     const { data, error } = await query
 
-    if (error) throw error
+    if (error) {
+      console.error('Supabase query error:', error)
+      // Provide more specific error messages
+      if (error.code === 'PGRST116') {
+        return NextResponse.json(
+          { data: null, error: 'News table not found. Please ensure the database is properly set up.' },
+          { status: 500 }
+        )
+      } else if (error.message?.includes('JWT') || error.message?.includes('auth')) {
+        return NextResponse.json(
+          { data: null, error: 'Authentication error. Please check your Supabase API keys in .env.local' },
+          { status: 500 }
+        )
+      }
+      throw error
+    }
 
-    return NextResponse.json({ data, error: null })
+    return NextResponse.json({ data: data || [], error: null })
   } catch (error) {
     console.error('Error fetching news:', error)
+    
+    // Check for DNS/network errors
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorString = errorMessage.toLowerCase()
+    
+    let userFriendlyError = 'Failed to fetch news. Please check your connection and try again.'
+    
+    if (errorString.includes('enotfound') || errorString.includes('getaddrinfo') || errorString.includes('dns')) {
+      userFriendlyError = 'Cannot connect to Supabase. Please verify your NEXT_PUBLIC_SUPABASE_URL in .env.local is correct and your Supabase project is active.'
+    } else if (errorString.includes('fetch failed') || errorString.includes('network')) {
+      userFriendlyError = 'Network error. Please check your internet connection and verify your Supabase project URL is correct.'
+    } else if (errorString.includes('timeout')) {
+      userFriendlyError = 'Connection timeout. Please check your network connection and try again.'
+    }
+    
     return NextResponse.json(
-      { data: null, error: error instanceof Error ? error.message : 'Failed to fetch news' },
+      { 
+        data: null, 
+        error: userFriendlyError 
+      },
       { status: 500 }
     )
   }

@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 import { useEvents } from '@/hooks/useEvents'
 import { 
@@ -15,16 +14,23 @@ import {
 
 const Events = () => {
   const [activeTab, setActiveTab] = useState<'upcoming' | 'completed'>('upcoming')
-  const { events: upcomingEvents, loading: upcomingLoading } = useEvents('upcoming')
-  const { events: completedEvents, loading: completedLoading } = useEvents('completed')
+  const { events: upcomingEvents, loading: upcomingLoading, error: upcomingError } = useEvents('upcoming')
+  const { events: completedEvents, loading: completedLoading, error: completedError } = useEvents('completed')
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    })
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) {
+        return 'Invalid Date'
+      }
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      })
+    } catch {
+      return 'Invalid Date'
+    }
   }
 
   const getCategoryColor = (tag: string) => {
@@ -41,6 +47,7 @@ const Events = () => {
 
   const events = activeTab === 'upcoming' ? upcomingEvents : completedEvents
   const loading = activeTab === 'upcoming' ? upcomingLoading : completedLoading
+  const error = activeTab === 'upcoming' ? upcomingError : completedError
 
   return (
     <section className="py-16 bg-white dark:bg-gray-950">
@@ -89,20 +96,25 @@ const Events = () => {
           </div>
         </div>
 
-        {/* Events Grid */}
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Loading events...</p>
+        {/* Loading State */}
+        {loading && (
+          <div className="flex items-center justify-center py-12 mb-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </div>
-        ) : events.length === 0 ? (
-          <div className="text-center py-12">
-            <CalendarDaysIcon className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-600 dark:text-gray-400">
-              No {activeTab === 'upcoming' ? 'upcoming' : 'completed'} events at the moment.
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center mb-12">
+            <p className="text-red-800 dark:text-red-300 font-medium mb-2">
+              Unable to load {activeTab === 'upcoming' ? 'upcoming' : 'completed'} events
             </p>
+            <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
           </div>
-        ) : (
+        )}
+
+        {/* Events Grid */}
+        {!loading && !error && events.length > 0 && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {events.map((event) => (
               <div 
@@ -144,7 +156,7 @@ const Events = () => {
 
                 {/* Event Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary dark:group-hover:text-blue-400 transition-colors duration-300">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-primary dark:group-hover:text-primary transition-colors duration-300">
                     {event.title}
                   </h3>
                   
@@ -155,17 +167,17 @@ const Events = () => {
                   {/* Event Details */}
                   <div className="space-y-3 mb-4">
                     <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                      <CalendarDaysIcon className="w-4 h-4 text-blue-500" />
+                      <CalendarDaysIcon className="w-4 h-4 text-primary" />
                       <span>{formatDate(event.date)}</span>
                     </div>
                     
                     <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                      <ClockIcon className="w-4 h-4 text-green-500" />
+                      <ClockIcon className="w-4 h-4 text-primary" />
                       <span>{event.time}</span>
                     </div>
                     
                     <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                      <MapPinIcon className="w-4 h-4 text-red-500" />
+                      <MapPinIcon className="w-4 h-4 text-primary" />
                       <span>{event.location}</span>
                     </div>
                   </div>
@@ -190,34 +202,19 @@ const Events = () => {
           </div>
         )}
 
-        {/* Bottom CTA */}
-        <div className="text-center">
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-gray-200 dark:border-gray-700">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              Want to Organize an Event?
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-              Have an idea for a community event? We&apos;d love to help you bring it to life. 
-              Contact our events team to get started.
+        {/* Empty State */}
+        {!loading && !error && events.length === 0 && (
+          <div className="text-center py-12 mb-12">
+            <CalendarDaysIcon className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+            <p className="text-gray-600 dark:text-gray-400 text-lg font-medium mb-2">
+              No {activeTab === 'upcoming' ? 'upcoming' : 'completed'} events available
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link 
-                href="/contact"
-                className="inline-flex items-center justify-center px-8 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-              >
-                <SparklesIcon className="mr-2 w-4 h-4" />
-                <span>Contact Us</span>
-              </Link>
-              <Link 
-                href="/event-page"
-                className="inline-flex items-center justify-center px-8 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:border-primary text-gray-900 dark:text-gray-100 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-              >
-                <CalendarDaysIcon className="mr-2 w-4 h-4" />
-                <span>View All Events</span>
-              </Link>
-            </div>
+            <p className="text-gray-500 dark:text-gray-500 text-sm">
+              Check back later for new community events.
+            </p>
           </div>
-        </div>
+        )}
+
       </div>
     </section>
   )

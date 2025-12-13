@@ -1,81 +1,107 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { 
   PhotoIcon,
   CalendarDaysIcon,
-  EyeIcon,
   ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline'
+import { useNews } from '@/hooks/useNews'
+import { NewsArticle } from '@/hooks/useNews'
+import Link from 'next/link'
 
-interface MediaItem {
-  id: number
-  title: string
-  description?: string
-  image?: string
-  date: string
-  category: string
-  views?: number
+// News Article Card Component
+const NewsArticleCard = ({ article, formatDate, getCategoryColor }: { 
+  article: NewsArticle
+  formatDate: (date: string) => string
+  getCategoryColor: (category: string) => string
+}) => {
+  const [imageError, setImageError] = useState(false)
+
+  return (
+    <div 
+      className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
+    >
+      <div className="relative h-48 overflow-hidden bg-gray-200 dark:bg-gray-700">
+        {!imageError ? (
+          <Image 
+            src={article.image || '/placeholder.jpg'} 
+            alt={article.title}
+            width={400}
+            height={250}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={() => setImageError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gray-200 dark:bg-gray-700">
+            <PhotoIcon className="w-12 h-12 text-gray-400 dark:text-gray-500" />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+        <div className="absolute top-4 left-4">
+          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(article.source)}`}>
+            {article.source}
+          </span>
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-primary transition-colors duration-300">
+          {article.title}
+        </h3>
+        <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed line-clamp-3">
+          {article.description}
+        </p>
+        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <div className="flex items-center space-x-2">
+            <CalendarDaysIcon className="w-4 h-4" />
+            <span>{formatDate(article.date)}</span>
+          </div>
+          <span className="text-xs">By {article.source}</span>
+        </div>
+        {article.news_link ? (
+          <Link 
+            href={article.news_link} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn"
+          >
+            <span>Read More</span>
+            <ArrowTopRightOnSquareIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+          </Link>
+        ) : (
+          <div className="w-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 font-semibold py-3 px-4 rounded-xl flex items-center justify-center space-x-2 cursor-not-allowed">
+            <span>No Link Available</span>
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
-interface VideoItem extends MediaItem {
-  duration: string
-  thumbnail: string
-  image: string
-}
 
-interface NewsItem extends MediaItem {
-  author: string
-  excerpt: string
-}
+
 
 const News = () => {
 
+  const { articles : newsArticles, loading, error } = useNews('published')
 
-  const news: NewsItem[] = [
-    {
-      id: 1,
-      title: 'New Community Center Opens Its Doors',
-      description: 'The state-of-the-art community center is now open for all residents.',
-      excerpt: 'After months of planning and construction, our new community center is finally ready to serve the Gulshan Society members.',
-      image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=400&h=250&fit=crop',
-      date: '2024-01-25',
-      category: 'Announcement',
-      author: 'Community Board',
-      views: 567
-    },
-    {
-      id: 2,
-      title: 'Security System Upgrade Completed',
-      description: 'Enhanced security measures now in place for better community safety.',
-      excerpt: 'Our community now benefits from upgraded security systems including CCTV cameras and access control.',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=250&fit=crop',
-      date: '2024-01-22',
-      category: 'Security',
-      author: 'Security Team',
-      views: 423
-    },
-    {
-      id: 3,
-      title: 'Environmental Initiative Launched',
-      description: 'New recycling program and green energy initiatives announced.',
-      excerpt: 'Join us in making Gulshan Society more environmentally friendly with our new recycling and sustainability programs.',
-      image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=250&fit=crop',
-      date: '2024-01-18',
-      category: 'Environment',
-      author: 'Green Committee',
-      views: 298
-    }
-  ]
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    })
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) {
+        return 'Invalid Date'
+      }
+      return date.toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
+      })
+    } catch {
+      return 'Invalid Date'
+    }
   }
 
   const getCategoryColor = (category: string) => {
@@ -99,13 +125,13 @@ const News = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center space-x-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="inline-flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
             <PhotoIcon className="w-4 h-4" />
             <span>News</span>
           </div>
           
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            Recent <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> News</span>
+            Recent <span className="text-primary"> News</span>
           </h2>
           
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -113,56 +139,41 @@ const News = () => {
           </p>
         </div>
 
-        
+        {/* Loading State */}
+        {loading && (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        )}
 
+        {/* Error State */}
+        {error && !loading && (
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center">
+            <p className="text-red-800 dark:text-red-300 font-medium mb-2">Unable to load news</p>
+            <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
+          </div>
+        )}
+
+        {/* News Articles */}
+        {!loading && !error && newsArticles.length > 0 && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {news.map((article) => (
-              <div 
+            {newsArticles.map((article : NewsArticle) => (
+              <NewsArticleCard
                 key={article.id}
-                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <Image 
-                    src={article.image || '/placeholder.jpg'} 
-                    alt={article.title}
-                    width={400}
-                    height={250}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                  <div className="absolute top-4 left-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getCategoryColor(article.category)}`}>
-                      {article.category}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-4 right-4 flex items-center space-x-1 text-white text-sm">
-                    <EyeIcon className="w-4 h-4" />
-                    <span>{article.views}</span>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-                    {article.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed">
-                    {article.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <CalendarDaysIcon className="w-4 h-4" />
-                      <span>{formatDate(article.date)}</span>
-                    </div>
-                    <span className="text-xs">By {article.author}</span>
-                  </div>
-                  <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn">
-                    <span>Read More</span>
-                    <ArrowTopRightOnSquareIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                  </button>
-                </div>
-              </div>
+                article={article}
+                formatDate={formatDate}
+                getCategoryColor={getCategoryColor}
+              />
             ))}
           </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && newsArticles.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-600 dark:text-gray-400">No news articles available at the moment.</p>
+          </div>
+        )}
 
       </div>
     </section>

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { supabase } from '@/lib/supabase/client'
 
 export interface NewsArticle {
   id: string
@@ -26,23 +25,38 @@ export const useNews = (status?: 'draft' | 'published') => {
       setLoading(true)
       setError(null)
 
-      let query = supabase
-        .from('news')
-        .select('*')
-        .order('date', { ascending: false })
+      // Build API URL with status query parameter if provided
+      const apiUrl = status 
+        ? `/api/news?status=${encodeURIComponent(status)}`
+        : '/api/news'
 
-      if (status) {
-        query = query.eq('status', status)
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Failed to fetch news' }))
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`)
       }
 
-      const { data, error: fetchError } = await query
+      const result = await response.json()
 
-      if (fetchError) throw fetchError
+      if (result.error) {
+        throw new Error(result.error)
+      }
 
-      setArticles(data || [])
+      setArticles(result.data || [])
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch news')
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : 'Failed to fetch news. Please check your connection and try again.'
+      setError(errorMessage)
       console.error('Error fetching news:', err)
+      // Set empty array on error to prevent UI crashes
+      setArticles([])
     } finally {
       setLoading(false)
     }
