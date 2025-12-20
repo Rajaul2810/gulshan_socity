@@ -15,7 +15,7 @@
   --color-primary-800: oklch(44.8% 0.119 151.328);
   --color-primary-900: oklch(39.3% 0.095 152.535);
   --color-primary-950: oklch(26.6% 0.065 152.934);
-  --color-primary: oklch(52.7% 0.154 150.069);
+  --color-primary: #2db14e;
   --color-primary-light: oklch(62.7% 0.194 149.214);
   --color-primary-dark: oklch(72.3% 0.219 149.579);
   

@@ -1,104 +1,17 @@
 'use client'
 
-import React, { useState } from 'react'
-import Image from 'next/image'
+import React from 'react'
 import { 
   UserGroupIcon,
   CalendarDaysIcon,
   TrophyIcon,
   HeartIcon,
   SparklesIcon,
-  CheckCircleIcon,
   BuildingOffice2Icon,
   ClockIcon
 } from '@heroicons/react/24/outline'
 
 const PreviousEC = () => {
-  const [selectedTerm, setSelectedTerm] = useState('2020-2022')
-
-  const executiveCommittees = {
-    '2020-2022': {
-      president: {
-        name: 'Dr. Ahmed Hassan',
-        position: 'President',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Led COVID-19 response initiatives', 'Digital transformation', 'Member count increased by 40%']
-      },
-      vicePresident: {
-        name: 'Fatima Rahman',
-        position: 'Vice President',
-        image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Community health programs', 'Youth engagement initiatives', 'Cultural events expansion']
-      },
-      secretary: {
-        name: 'Mohammad Ali',
-        position: 'Secretary',
-        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Digital record management', 'Member communication system', 'Event coordination']
-      },
-      treasurer: {
-        name: 'Ayesha Khan',
-        position: 'Treasurer',
-        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Financial transparency', 'Budget optimization', 'Emergency fund establishment']
-      }
-    },
-    '2018-2020': {
-      president: {
-        name: 'Dr. Rahman Khan',
-        position: 'President',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Community center expansion', 'Security system upgrade', 'Member services enhancement']
-      },
-      vicePresident: {
-        name: 'Nusrat Begum',
-        position: 'Vice President',
-        image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Educational programs', 'Women empowerment initiatives', 'Cultural preservation']
-      },
-      secretary: {
-        name: 'Karim Ahmed',
-        position: 'Secretary',
-        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Documentation system', 'Member database', 'Communication protocols']
-      },
-      treasurer: {
-        name: 'Rashida Akter',
-        position: 'Treasurer',
-        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Financial planning', 'Resource allocation', 'Audit compliance']
-      }
-    },
-    '2016-2018': {
-      president: {
-        name: 'Prof. Abdul Malik',
-        position: 'President',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Infrastructure development', 'Member engagement', 'Community partnerships']
-      },
-      vicePresident: {
-        name: 'Shamima Khatun',
-        position: 'Vice President',
-        image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Health awareness programs', 'Social welfare initiatives', 'Community outreach']
-      },
-      secretary: {
-        name: 'Hasan Mahmud',
-        position: 'Secretary',
-        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Record keeping system', 'Member registration', 'Event management']
-      },
-      treasurer: {
-        name: 'Nasreen Sultana',
-        position: 'Treasurer',
-        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-        achievements: ['Budget management', 'Financial reporting', 'Resource optimization']
-      }
-    }
-  }
-
-  const terms = Object.keys(executiveCommittees)
-  const currentEC = executiveCommittees[selectedTerm as keyof typeof executiveCommittees]
 
   const achievements = [
     {
@@ -162,58 +75,9 @@ const PreviousEC = () => {
             </p>
           </div>
 
-          <div className="flex justify-center mb-12">
-            <div className="bg-gray-100 rounded-2xl p-2 flex space-x-2">
-              {terms.map((term) => (
-                <button
-                  key={term}
-                  onClick={() => setSelectedTerm(term)}
-                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    selectedTerm === term
-                      ? 'bg-primary text-white shadow-lg'
-                      : 'text-gray-600 hover:text-primary hover:bg-white'
-                  }`}
-                >
-                  {term}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Executive Committee */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {Object.entries(currentEC).map(([role, member]) => (
-              <div key={role} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200">
-                <div className="text-center">
-                  <div className="relative w-32 h-32 mx-auto mb-4">
-                    <Image 
-                      src={member.image}
-                      alt={member.name}
-                      width={128}
-                      height={128}
-                      className="w-full h-full object-cover rounded-full border-4 border-primary-100"
-                    />
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    {member.name}
-                  </h3>
-                  
-                  <div className="text-primary font-semibold mb-4">
-                    {member.position}
-                  </div>
-                  
-                  <div className="space-y-2">
-                    {member.achievements.map((achievement, index) => (
-                      <div key={index} className="flex items-start space-x-2">
-                        <CheckCircleIcon className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm text-gray-600">{achievement}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="text-center" >
+            <p className="text-gray-600">No data found</p>
           </div>
         </div>
       </section>
