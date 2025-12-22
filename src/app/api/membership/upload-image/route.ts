@@ -5,6 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File
+    const folder = (formData.get('folder') as string) || null
 
     if (!file) {
       return NextResponse.json(
@@ -13,10 +14,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file type - only images
-    if (!file.type.startsWith('image/')) {
+    // Validate file type - images and PDFs
+    const isValidFile = file.type.startsWith('image/') || file.type === 'application/pdf'
+    if (!isValidFile) {
       return NextResponse.json(
-        { data: null, error: 'Only image files are allowed' },
+        { data: null, error: 'Only image files (JPG, PNG) and PDF files are allowed' },
         { status: 400 }
       )
     }
@@ -34,7 +36,10 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now()
     const randomString = Math.random().toString(36).substring(2, 15)
     const fileExt = file.name.split('.').pop()
-    const fileName = `photos/${timestamp}-${randomString}.${fileExt}`
+    
+    // Determine folder - use provided folder, or default based on file type
+    const targetFolder = folder || (file.type === 'application/pdf' ? 'documents' : 'photos')
+    const fileName = `${targetFolder}/${timestamp}-${randomString}.${fileExt}`
 
     // Convert file to buffer
     const arrayBuffer = await file.arrayBuffer()

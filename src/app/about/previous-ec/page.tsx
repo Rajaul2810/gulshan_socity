@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { 
   UserGroupIcon,
   CalendarDaysIcon,
@@ -8,10 +8,20 @@ import {
   HeartIcon,
   SparklesIcon,
   BuildingOffice2Icon,
-  ClockIcon
+  ClockIcon,
+  MapPinIcon,
+  UserCircleIcon
 } from '@heroicons/react/24/outline'
+import { gulshanSocietyCommittees } from '@/lib/data/committee'
 
 const PreviousEC = () => {
+  const [selectedTerm, setSelectedTerm] = useState<string | null>(
+    gulshanSocietyCommittees.length > 0 ? gulshanSocietyCommittees[0].committee_term : null
+  )
+
+  const selectedCommittee = gulshanSocietyCommittees.find(
+    committee => committee.committee_term === selectedTerm
+  )
 
   const achievements = [
     {
@@ -75,10 +85,78 @@ const PreviousEC = () => {
             </p>
           </div>
 
-          {/* Executive Committee */}
-          <div className="text-center" >
-            <p className="text-gray-600">No data found</p>
+          {/* Term Selector */}
+          <div className="mb-12">
+            <div className="flex flex-wrap justify-center gap-4">
+              {gulshanSocietyCommittees.map((committee) => (
+                <button
+                  key={committee.committee_term}
+                  onClick={() => setSelectedTerm(committee.committee_term)}
+                  className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
+                    selectedTerm === committee.committee_term
+                      ? 'bg-primary text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {committee.committee_term.split(' ').slice(0, 1).join(' ')}
+                </button>
+              ))}
+            </div>
           </div>
+
+          {/* Executive Committee Members */}
+          {selectedCommittee && (
+            <div className="mb-8">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  {selectedCommittee.committee_term}
+                </h3>
+                <p className="text-gray-600">
+                  {selectedCommittee.members.length} Members
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {selectedCommittee.members.map((member, index) => (
+                  <div
+                    key={index}
+                    className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-primary-300"
+                  >
+                    <div className="flex items-start space-x-4 mb-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center">
+                          <UserCircleIcon className="w-8 h-8 text-primary" />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-lg font-bold text-gray-900 mb-1 truncate">
+                          {member.name}
+                        </h4>
+                        <p className="text-sm font-semibold text-primary mb-2">
+                          {member.designation}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {member.address && (
+                      <div className="flex items-start space-x-2 text-gray-600">
+                        <MapPinIcon className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm leading-relaxed">
+                          {member.address}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!selectedCommittee && (
+            <div className="text-center py-12">
+              <p className="text-gray-600">No committee data available</p>
+            </div>
+          )}
         </div>
       </section>
 

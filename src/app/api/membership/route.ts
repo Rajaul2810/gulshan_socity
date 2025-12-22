@@ -58,13 +58,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Handle file uploads (only images)
+    // Handle file uploads (images and PDFs)
     const uploadFile = async (file: File, folder: string): Promise<string | null> => {
       if (!file) return null
       
-      // Only accept image files
-      if (!file.type.startsWith('image/')) {
-        console.warn(`File ${file.name} is not an image, skipping upload`)
+      // Accept image files and PDFs
+      const isValidFile = file.type.startsWith('image/') || file.type === 'application/pdf'
+      if (!isValidFile) {
+        console.warn(`File ${file.name} is not an image or PDF, skipping upload`)
+        return null
+      }
+
+      // Validate file size (max 5MB)
+      const maxSize = 5 * 1024 * 1024 // 5MB
+      if (file.size > maxSize) {
+        console.warn(`File ${file.name} exceeds 5MB limit, skipping upload`)
         return null
       }
 
@@ -100,13 +108,30 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Upload only image files
+    // Upload all document files
     const photoUrl = formData.get('photo') instanceof File 
       ? await uploadFile(formData.get('photo') as File, 'photos')
       : null
 
-    // Note: NID, tax receipt, lease agreement, trade license, TIN/BIN are not uploaded
-    // as per requirement - only images are stored
+    const nidUrl = formData.get('nid') instanceof File 
+      ? await uploadFile(formData.get('nid') as File, 'nid')
+      : null
+
+    const taxReceiptUrl = formData.get('taxReceipt') instanceof File 
+      ? await uploadFile(formData.get('taxReceipt') as File, 'tax-receipts')
+      : null
+
+    const leaseAgreementUrl = formData.get('leaseAgreement') instanceof File 
+      ? await uploadFile(formData.get('leaseAgreement') as File, 'lease-agreements')
+      : null
+
+    const tradeLicenseUrl = formData.get('tradeLicense') instanceof File 
+      ? await uploadFile(formData.get('tradeLicense') as File, 'trade-licenses')
+      : null
+
+    const tinBinCertificateUrl = formData.get('tinBinCertificate') instanceof File 
+      ? await uploadFile(formData.get('tinBinCertificate') as File, 'certificates')
+      : null
 
     // Insert application into database
     const { data, error } = await supabaseServer
@@ -138,6 +163,11 @@ export async function POST(request: NextRequest) {
         seconder_name: seconderName || null,
         seconder_membership_no: seconderMembershipNo || null,
         photo_url: photoUrl,
+        nid_url: nidUrl,
+        tax_receipt_url: taxReceiptUrl,
+        lease_agreement_url: leaseAgreementUrl,
+        trade_license_url: tradeLicenseUrl,
+        tin_bin_certificate_url: tinBinCertificateUrl,
         children: children.length > 0 ? children : null,
       })
       .select()

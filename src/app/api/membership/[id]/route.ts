@@ -42,7 +42,17 @@ export async function PATCH(
   try {
     const { id } = await params
     const body = await request.json()
-    const { membership_number, zone, status } = body
+    const { 
+      membership_number, 
+      zone, 
+      status,
+      nid_url,
+      tax_receipt_url,
+      lease_agreement_url,
+      trade_license_url,
+      tin_bin_certificate_url,
+      ...otherFields
+    } = body
 
     // Validate status if provided
     if (status && !['pending', 'under_review', 'approved', 'rejected'].includes(status)) {
@@ -60,7 +70,7 @@ export async function PATCH(
       )
     }
 
-    const updateData: { membership_number?: string | null; zone?: string | null; status?: 'pending' | 'under_review' | 'approved' | 'rejected'; approved_date?: string } = {}
+    const updateData: Record<string, string | null> = {}
     if (membership_number !== undefined) updateData.membership_number = membership_number || null
     if (zone !== undefined) updateData.zone = zone || null
     if (status !== undefined) {
@@ -69,6 +79,20 @@ export async function PATCH(
         updateData.approved_date = new Date().toISOString()
       }
     }
+    
+    // Add document URLs if provided
+    if (nid_url !== undefined) updateData.nid_url = nid_url || null
+    if (tax_receipt_url !== undefined) updateData.tax_receipt_url = tax_receipt_url || null
+    if (lease_agreement_url !== undefined) updateData.lease_agreement_url = lease_agreement_url || null
+    if (trade_license_url !== undefined) updateData.trade_license_url = trade_license_url || null
+    if (tin_bin_certificate_url !== undefined) updateData.tin_bin_certificate_url = tin_bin_certificate_url || null
+    
+    // Add any other fields from the body (for full updates)
+    Object.keys(otherFields).forEach(key => {
+      if (otherFields[key] !== undefined) {
+        updateData[key] = otherFields[key]
+      }
+    })
 
     const { data, error } = await supabaseServer
       .from('membership_applications')

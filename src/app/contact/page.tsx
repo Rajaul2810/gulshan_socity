@@ -47,9 +47,9 @@ const Contact = () => {
     setFormStatus("submitting");
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
@@ -79,7 +79,7 @@ const Contact = () => {
         termsAccepted: false,
       });
     } catch (error) {
-      console.error('Error submitting contact form:', error);
+      console.error("Error submitting contact form:", error);
       setFormStatus("error");
       // Reset to idle after showing error
       setTimeout(() => {
@@ -87,8 +87,6 @@ const Contact = () => {
       }, 3000);
     }
   };
-
-
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -106,7 +104,9 @@ const Contact = () => {
             </h1>
 
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              For inquiries or assistance, reach out to us. Join our community for cultural events, civic projects, and positive impact in Gulshan Model Town.
+              For inquiries or assistance, reach out to us. Join our community
+              for cultural events, civic projects, and positive impact in
+              Gulshan Model Town.
             </p>
           </div>
         </div>
@@ -133,7 +133,8 @@ const Contact = () => {
                     Call us for immediate assistance
                   </p>
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    +88-02-9881375<br />
+                    +88-02-9881375
+                    <br />
                     +880 1715-882117
                   </p>
                 </div>
@@ -191,8 +192,10 @@ const Contact = () => {
                     Visit our office
                   </p>
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    House# 7/B, Flat# A-1<br />
-                    Road# 103, Gulshan-2<br />
+                    House# 7/B, Flat# A1
+                    <br />
+                    Road# 103, Gulshan-2
+                    <br />
                     Dhaka-1212
                   </p>
                 </div>
@@ -427,11 +430,11 @@ const Contact = () => {
                       Main Office
                     </h4>
                     <p className="text-gray-600 dark:text-gray-300 text-sm">
-                      Gulshan Society Management Office
+                      Gulshan Society
                       <br />
-                      House# 7/B, Flat# A-1
+                      House # 7/B, Flat # A1, Road # 103,
                       <br />
-                      Road# 103, Gulshan-2, Dhaka-1212
+                      Gulshan-2, Dhaka-1212.
                     </p>
                   </div>
                 </div>
@@ -443,7 +446,8 @@ const Contact = () => {
                       Location
                     </h4>
                     <p className="text-gray-600 dark:text-gray-300 text-sm">
-                      Gulshan-2 Area<br />
+                      Gulshan-2 Area
+                      <br />
                       Near Gulshan Circle 2
                       <br />
                       Easy access by public transport
@@ -452,7 +456,6 @@ const Contact = () => {
                 </div>
               </div>
             </div>
-
 
             {/* Emergency Contact */}
             <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-2xl border border-red-200 dark:border-red-800 p-6">
@@ -486,16 +489,16 @@ const Contact = () => {
           </h2>
 
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3650.501558656397!2d90.4052009748472!3d23.800757486842006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c705d63bfb3d%3A0x551bd1ffc5d6ed08!2sGulshan%20Society%20Jame%20Masjid!5e0!3m2!1sen!2sbd!4v1760642053633!5m2!1sen!2sbd"
-                width="100%"
-                height="450"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3650.7258041919813!2d90.4197764!3d23.7927765!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7a3f79a7a1f%3A0xd0bd813c4c162415!2sHouse%207%20B%20Flat%20A1%2C%202%20Rd%20103%2C%20Dhaka%201212!5e0!3m2!1sen!2sbd!4v1766421643780!5m2!1sen!2sbd"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
         </div>
       </div>
     </div>

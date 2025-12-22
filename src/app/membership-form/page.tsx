@@ -215,6 +215,12 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
         alert(`File ${files[0].name} is too large. Maximum size is 5MB.`);
         return;
       }
+      // Validate file type (images or PDFs)
+      const isValidFile = files[0].type.startsWith('image/') || files[0].type === 'application/pdf';
+      if (!isValidFile) {
+        alert(`File ${files[0].name} is not a valid file type. Please upload an image (JPG, PNG) or PDF.`);
+        return;
+      }
       setFormData((prev) => ({ ...prev, [name]: files[0] }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: null }));
@@ -317,19 +323,44 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
           membership_date: new Date().toISOString().split('T')[0],
         };
 
-        // Upload photo if provided
-        if (formData.photo) {
-          const photoFormData = new FormData();
-          photoFormData.append('file', formData.photo);
-          const uploadRes = await fetch('/api/membership/upload-image', {
-            method: 'POST',
-            body: photoFormData,
-          });
-          const uploadResult = await uploadRes.json();
-          if (uploadResult.data?.url) {
-            memberData.photo_url = uploadResult.data.url;
+        // Helper function to upload documents using the main API route approach
+        const uploadDocument = async (file: File | null, folder: string): Promise<string | null> => {
+          if (!file) return null;
+          
+          try {
+            // Create FormData with file and folder
+            const uploadFormData = new FormData();
+            uploadFormData.append('file', file);
+            uploadFormData.append('folder', folder);
+            
+            // Use the upload-image endpoint (now supports PDFs and custom folders)
+            const uploadRes = await fetch('/api/membership/upload-image', {
+              method: 'POST',
+              body: uploadFormData,
+            });
+            
+            const uploadResult = await uploadRes.json();
+            if (uploadResult.error) {
+              console.error(`Error uploading ${folder}:`, uploadResult.error);
+              return null;
+            }
+            return uploadResult.data?.url || null;
+          } catch (error) {
+            console.error(`Error uploading ${folder}:`, error);
+            return null;
           }
+        };
+
+        // Upload all documents
+        if (formData.photo) {
+          const photoUrl = await uploadDocument(formData.photo, 'photos');
+          if (photoUrl) memberData.photo_url = photoUrl;
         }
+        const nidUrl = await uploadDocument(formData.nid || null, 'nid');
+        const taxReceiptUrl = await uploadDocument(formData.taxReceipt || null, 'tax-receipts');
+        const leaseAgreementUrl = await uploadDocument(formData.leaseAgreement || null, 'lease-agreements');
+        const tradeLicenseUrl = await uploadDocument(formData.tradeLicense || null, 'trade-licenses');
+        const tinBinCertificateUrl = await uploadDocument(formData.tinBinCertificate || null, 'certificates');
 
         let response;
         if (appId) {
@@ -342,6 +373,11 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
               membership_number: adminFields.membership_number,
               zone: adminFields.zone,
               status: 'approved',
+              nid_url: nidUrl,
+              tax_receipt_url: taxReceiptUrl,
+              lease_agreement_url: leaseAgreementUrl,
+              trade_license_url: tradeLicenseUrl,
+              tin_bin_certificate_url: tinBinCertificateUrl,
             }),
           });
         } else {
@@ -419,8 +455,13 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
           }
         });
         
-        // Add only image files
+        // Add all document files
         if (formData.photo) payload.append('photo', formData.photo);
+        if (formData.nid) payload.append('nid', formData.nid);
+        if (formData.taxReceipt) payload.append('taxReceipt', formData.taxReceipt);
+        if (formData.leaseAgreement) payload.append('leaseAgreement', formData.leaseAgreement);
+        if (formData.tradeLicense) payload.append('tradeLicense', formData.tradeLicense);
+        if (formData.tinBinCertificate) payload.append('tinBinCertificate', formData.tinBinCertificate);
 
         const res = await fetch("/api/membership", {
           method: "POST",
@@ -1114,33 +1155,138 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
             </div>
           </div>
 
-          {/* Document Upload - Only Images */}
+          {/* Document Upload Section */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center space-x-3 mb-6">  
               <div className="p-2 bg-gradient-primary rounded-lg">
                 <DocumentTextIcon className="w-5 h-5 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Profile Photo
+                Required Documents
               </h3>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-6">
+              {/* Profile Photo - Required for all */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Profile Photo (PP size)
+                  Photograph PP Size (2 Copies) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="file"
                   name="photo"
                   accept="image/*"
                   onChange={handleFileChange}
+                  required
                   className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:border-primary dark:hover:border-primary transition-colors duration-200 cursor-pointer"
                 />
                 {formData.photo && (
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.photo.name}</p>
                 )}
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Only image files are accepted. Max size: 5MB</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image files only (JPG, PNG). Max size: 5MB</p>
               </div>
+
+              {/* NID Card - Required for all */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Photo Copy of NID Card <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="file"
+                  name="nid"
+                  accept="image/*,application/pdf"
+                  onChange={handleFileChange}
+                  required
+                  className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:border-primary dark:hover:border-primary transition-colors duration-200 cursor-pointer"
+                />
+                {formData.nid && (
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.nid.name}</p>
+                )}
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+              </div>
+
+              {/* Tax Receipt - Required for all */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Photo Copy of Most Recent Holding Tax Receipt of DNCC or Registered Sale Deed or Share Documents Certificate <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="file"
+                  name="taxReceipt"
+                  accept="image/*,application/pdf"
+                  onChange={handleFileChange}
+                  required
+                  className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:border-primary dark:hover:border-primary transition-colors duration-200 cursor-pointer"
+                />
+                {formData.taxReceipt && (
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.taxReceipt.name}</p>
+                )}
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+              </div>
+
+              {/* Lease Agreement - Required for Associate Membership */}
+              {(formData.membershipType === 'Associate' || formData.membershipType === 'Corporate') && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {formData.membershipType === 'Associate' 
+                      ? 'Photo Copy of Valid Lease Agreement or Most Recent Rental Money Receipt' 
+                      : 'Valid Lease Agreement / Proof of Ownership'}
+                    <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="file"
+                    name="leaseAgreement"
+                    accept="image/*,application/pdf"
+                    onChange={handleFileChange}
+                    required={formData.membershipType === 'Associate' || formData.membershipType === 'Corporate'}
+                    className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:border-primary dark:hover:border-primary transition-colors duration-200 cursor-pointer"
+                  />
+                  {formData.leaseAgreement && (
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.leaseAgreement.name}</p>
+                  )}
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+                </div>
+              )}
+
+              {/* Corporate Membership Documents */}
+              {formData.membershipType === 'Corporate' && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Photo Copy of Trade License / RJSC / Corporation Certificate <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="file"
+                      name="tradeLicense"
+                      accept="image/*,application/pdf"
+                      onChange={handleFileChange}
+                      required
+                      className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:border-primary dark:hover:border-primary transition-colors duration-200 cursor-pointer"
+                    />
+                    {formData.tradeLicense && (
+                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.tradeLicense.name}</p>
+                    )}
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Photo Copy of TIN / BIN Certificate <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="file"
+                      name="tinBinCertificate"
+                      accept="image/*,application/pdf"
+                      onChange={handleFileChange}
+                      required
+                      className="w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 hover:border-primary dark:hover:border-primary transition-colors duration-200 cursor-pointer"
+                    />
+                    {formData.tinBinCertificate && (
+                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.tinBinCertificate.name}</p>
+                    )}
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
