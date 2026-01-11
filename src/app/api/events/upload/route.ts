@@ -52,13 +52,13 @@ export async function POST(request: NextRequest) {
     if (uploadError) throw uploadError
 
     // Get public URL
-    const { data: urlData } = supabaseServer.storage
+    const urlData = supabaseServer.storage
       .from('events-images')
       .getPublicUrl(fileName)
 
     return NextResponse.json({
       data: {
-        url: urlData.publicUrl,
+        url: urlData.data.publicUrl,
         path: uploadData.path,
       },
       error: null,
