@@ -2,8 +2,7 @@
 
 import React, { useState, useMemo } from 'react'
 import Image from 'next/image'
-import { useMembers } from '@/hooks/useMembers'
-import { Member } from '@/hooks/useMembers'
+import { useMembers, Member } from '@/hooks/useMembers'
 import { 
   UserGroupIcon,
   MagnifyingGlassIcon,
@@ -15,6 +14,9 @@ import {
   CheckCircleIcon,
   StarIcon
 } from '@heroicons/react/24/outline'
+
+import dummyMembers from '../../../DUMMY_MEMBERS_PREVIEW.json'
+
 
 const MemberList = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -43,33 +45,33 @@ const MemberList = () => {
   const { members, loading, error } = useMembers(filters)
 
   // Client-side filtering for search and sorting
-  const filteredMembers = useMemo(() => {
-    const filtered = members.filter(member => {
-      const matchesSearch = searchTerm === '' || 
-        member.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.mobile?.includes(searchTerm) ||
-        member.membership_number?.toLowerCase().includes(searchTerm.toLowerCase())
+  // const filteredMembers = useMemo(() => {
+  //   const filtered = members.filter(member => {
+  //     const matchesSearch = searchTerm === '' || 
+  //       member.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //       member.mobile?.includes(searchTerm) ||
+  //       member.membership_number?.toLowerCase().includes(searchTerm.toLowerCase())
       
-      return matchesSearch
-    })
+  //     return matchesSearch
+  //   })
 
-    // Sort members
-    filtered.sort((a, b) => {
-      switch (sortBy) {
-        case 'name':
-          return (a.name || '').localeCompare(b.name || '')
-        case 'joinDate':
-          return new Date(b.membership_date || '').getTime() - new Date(a.membership_date || '').getTime()
-        case 'membershipType':
-          return (a.membership_type || '').localeCompare(b.membership_type || '')
-        default:
-          return 0
-      }
-    })
+  //   // Sort members
+  //   filtered.sort((a, b) => {
+  //     switch (sortBy) {
+  //       case 'name':
+  //         return (a.name || '').localeCompare(b.name || '')
+  //       case 'joinDate':
+  //         return new Date(b.membership_date || '').getTime() - new Date(a.membership_date || '').getTime()
+  //       case 'membershipType':
+  //         return (a.membership_type || '').localeCompare(b.membership_type || '')
+  //       default:
+  //         return 0
+  //     }
+  //   })
 
-    return filtered
-  }, [members, searchTerm, sortBy])
+  //   return filtered
+  // }, [members, searchTerm, sortBy])
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -246,13 +248,13 @@ const MemberList = () => {
             <>
               <div className="mb-6">
                 <p className="text-gray-600">
-                  Showing {filteredMembers.length} of {members.length} members
+                  Showing {dummyMembers.members.length} of {dummyMembers.members.length} members
                 </p>
               </div>
 
-              {filteredMembers.length > 0 ? (
+              {dummyMembers.members.length > 0 ? (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredMembers.map((member: Member) => (
+                  {(dummyMembers.members as Member[]).map((member: Member) => (
                     <div key={member.id} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200">
                       <div className="flex items-start space-x-4 mb-4">
                         <div className="relative">
@@ -304,7 +306,7 @@ const MemberList = () => {
                         {member.mobile && (
                           <div className="flex items-center space-x-3">
                             <PhoneIcon className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">{member.mobile}</span>
+                            <span className="text-sm text-gray-600">{member.mobile.slice(0, 4)} **** ****</span>
                           </div>
                         )}
                         
@@ -360,12 +362,12 @@ const MemberList = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">{members.length}</div>
+                <div className="text-3xl font-bold text-primary mb-2">{dummyMembers.members.length}</div>
                 <div className="text-gray-600">Total Members</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-2">
-                  {members.length > 0 
+                  {dummyMembers.members.length > 0 
                     ? Math.round((members.filter(m => m.status === 'active').length / members.length) * 100)
                     : 0}%
                 </div>
