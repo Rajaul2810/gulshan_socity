@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
 import { useMembers, Member } from '@/hooks/useMembers'
 import { 
@@ -12,17 +12,21 @@ import {
   MapPinIcon,
   CalendarDaysIcon,
   CheckCircleIcon,
-  StarIcon
+  StarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
 } from '@heroicons/react/24/outline'
 
-import dummyMembers from '../../../DUMMY_MEMBERS_PREVIEW.json'
-
+const ITEMS_PER_PAGE_OPTIONS = [9, 18, 36, 72]
+const DEFAULT_ITEMS_PER_PAGE = 18
 
 const MemberList = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive' | 'suspended'>('all')
   const [filterZone, setFilterZone] = useState<string>('all')
   const [sortBy, setSortBy] = useState('name')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE)
 
   // Build filters for the hook
   const filters = useMemo(() => {
@@ -44,34 +48,52 @@ const MemberList = () => {
 
   const { members, loading, error } = useMembers(filters)
 
-  // Client-side filtering for search and sorting
-  // const filteredMembers = useMemo(() => {
-  //   const filtered = members.filter(member => {
-  //     const matchesSearch = searchTerm === '' || 
-  //       member.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //       member.mobile?.includes(searchTerm) ||
-  //       member.membership_number?.toLowerCase().includes(searchTerm.toLowerCase())
+  //Client-side filtering for search and sorting
+  const filteredMembers = useMemo(() => {
+    const filtered = members.filter(member => {
+      const matchesSearch = searchTerm === '' || 
+        member.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.mobile?.includes(searchTerm) ||
+        member.membership_number?.toLowerCase().includes(searchTerm.toLowerCase())
       
-  //     return matchesSearch
-  //   })
+      return matchesSearch
+    })
 
-  //   // Sort members
-  //   filtered.sort((a, b) => {
-  //     switch (sortBy) {
-  //       case 'name':
-  //         return (a.name || '').localeCompare(b.name || '')
-  //       case 'joinDate':
-  //         return new Date(b.membership_date || '').getTime() - new Date(a.membership_date || '').getTime()
-  //       case 'membershipType':
-  //         return (a.membership_type || '').localeCompare(b.membership_type || '')
-  //       default:
-  //         return 0
-  //     }
-  //   })
+    // Sort members
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return (a.name || '').localeCompare(b.name || '')
+        case 'joinDate':
+          return new Date(b.membership_date || '').getTime() - new Date(a.membership_date || '').getTime()
+        case 'membershipType':
+          return (a.membership_type || '').localeCompare(b.membership_type || '')
+        default:
+          return 0
+      }
+    })
 
-  //   return filtered
-  // }, [members, searchTerm, sortBy])
+    return filtered
+  }, [members, searchTerm, sortBy])
+
+  // Reset to page 1 when filters or search change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm, filterStatus, filterZone, sortBy])
+
+  // Pagination
+  const totalPages = Math.max(1, Math.ceil(filteredMembers.length / itemsPerPage))
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = Math.min(startIndex + itemsPerPage, filteredMembers.length)
+  const paginatedMembers = useMemo(
+    () => filteredMembers.slice(startIndex, endIndex),
+    [filteredMembers, startIndex, endIndex]
+  )
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)))
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -182,7 +204,7 @@ const MemberList = () => {
                   placeholder="Search by name, email, or phone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
                 />
               </div>
             </div>
@@ -192,7 +214,7 @@ const MemberList = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as 'all' | 'active' | 'inactive' | 'suspended')}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
+                className="px-4 py-3 border border-gray-300 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
               >
                 <option value="all">All Status</option>
                 <option value="active">Active</option>
@@ -203,7 +225,7 @@ const MemberList = () => {
               <select
                 value={filterZone}
                 onChange={(e) => setFilterZone(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
+                className="px-4 py-3 border border-gray-300 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
               >
                 <option value="all">All Zones</option>
                 {availableZones.map(zone => (
@@ -214,7 +236,7 @@ const MemberList = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
+                className="px-4 py-3 border border-gray-300 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
               >
                 <option value="name">Sort by Name</option>
                 <option value="joinDate">Sort by Join Date</option>
@@ -246,15 +268,33 @@ const MemberList = () => {
           {/* Members List */}
           {!loading && !error && (
             <>
-              <div className="mb-6">
+              <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <p className="text-gray-600">
-                  Showing {dummyMembers.members.length} of {dummyMembers.members.length} members
+                  Showing {filteredMembers.length > 0 ? startIndex + 1 : 0}–{endIndex} of {filteredMembers.length} members
                 </p>
+                <div className="flex items-center gap-3">
+                  <label htmlFor="per-page" className="text-sm text-gray-600 whitespace-nowrap">
+                    Per page
+                  </label>
+                  <select
+                    id="per-page"
+                    value={itemsPerPage}
+                    onChange={(e) => {
+                      setItemsPerPage(Number(e.target.value))
+                      setCurrentPage(1)
+                    }}
+                    className="px-3 py-2 border border-gray-300 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                  >
+                    {ITEMS_PER_PAGE_OPTIONS.map((n) => (
+                      <option key={n} value={n}>{n}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              {dummyMembers.members.length > 0 ? (
+              {filteredMembers.length > 0 ? (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {(dummyMembers.members as Member[]).map((member: Member) => (
+                  {(paginatedMembers as Member[]).map((member: Member) => (
                     <div key={member.id} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-200">
                       <div className="flex items-start space-x-4 mb-4">
                         <div className="relative">
@@ -327,11 +367,11 @@ const MemberList = () => {
                         )}
                       </div>
 
-                      <div className="mt-4 pt-4 border-t border-gray-200">
+                      {/* <div className="mt-4 pt-4 border-t border-gray-200">
                         <button className="w-full bg-primary hover:bg-primary-800 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200">
                           View Profile
                         </button>
-                      </div>
+                      </div> */}
                     </div>
                   ))}
                 </div>
@@ -340,6 +380,59 @@ const MemberList = () => {
                   <UserCircleIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">No members found</h3>
                   <p className="text-gray-600">Try adjusting your search criteria or filters.</p>
+                </div>
+              )}
+
+              {/* Pagination */}
+              {filteredMembers.length > 0 && totalPages > 1 && (
+                <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gray-200 pt-6">
+                  <p className="text-sm text-gray-600">
+                    Page {currentPage} of {totalPages}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => goToPage(currentPage - 1)}
+                      disabled={currentPage <= 1}
+                      className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-colors"
+                    >
+                      <ChevronLeftIcon className="w-5 h-5" />
+                      Previous
+                    </button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1)
+                        .filter((p) => {
+                          if (totalPages <= 7) return true
+                          if (p === 1 || p === totalPages) return true
+                          if (Math.abs(p - currentPage) <= 1) return true
+                          return false
+                        })
+                        .map((p, idx, arr) => (
+                          <React.Fragment key={p}>
+                            {idx > 0 && arr[idx - 1] !== p - 1 && (
+                              <span className="px-2 text-gray-400">…</span>
+                            )}
+                            <button
+                              onClick={() => goToPage(p)}
+                              className={`min-w-[2.25rem] py-2 px-2 rounded-lg text-sm font-medium transition-colors ${
+                                currentPage === p
+                                  ? 'bg-primary text-white'
+                                  : 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                              }`}
+                            >
+                              {p}
+                            </button>
+                          </React.Fragment>
+                        ))}
+                    </div>
+                    <button
+                      onClick={() => goToPage(currentPage + 1)}
+                      disabled={currentPage >= totalPages}
+                      className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-colors"
+                    >
+                      Next
+                      <ChevronRightIcon className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
               )}
             </>
@@ -362,12 +455,12 @@ const MemberList = () => {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">{dummyMembers.members.length}</div>
+                <div className="text-3xl font-bold text-primary mb-2">{members.length}</div>
                 <div className="text-gray-600">Total Members</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-2">
-                  {dummyMembers.members.length > 0 
+                  {members.length > 0 
                     ? Math.round((members.filter(m => m.status === 'active').length / members.length) * 100)
                     : 0}%
                 </div>

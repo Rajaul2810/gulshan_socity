@@ -85,7 +85,6 @@ export const useMembers = (filters?: {
   useEffect(() => {
     fetchMembers()
   }, [fetchMembers])
-
   return { members, loading, error, refetch: fetchMembers }
 }
 
