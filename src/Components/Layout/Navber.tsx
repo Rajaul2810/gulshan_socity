@@ -383,6 +383,12 @@ const Navber = () => {
               Events
             </Link>
             <Link
+              href="/notice-page"
+              className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
+            >
+              Notice
+            </Link>
+            <Link
               href="/contact"
               className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
             >

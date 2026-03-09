@@ -16,7 +16,10 @@ import {
   ArrowRightIcon,
   MapPinIcon,
   BuildingOfficeIcon,
+  MegaphoneIcon,
+  ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline'
+import { useAdminAuth } from '@/contexts/AdminAuthContext'
 
 interface NavItem {
   name: string
@@ -27,6 +30,7 @@ interface NavItem {
 const AdminSidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { logout } = useAdminAuth()
 
   const navigation: NavItem[] = [
     { name: 'Dashboard', href: '/admin', icon: HomeIcon },
@@ -34,6 +38,7 @@ const AdminSidebar = () => {
     { name: 'Events', href: '/admin/events', icon: CalendarDaysIcon },
     { name: 'Gallery', href: '/admin/gallery', icon: PhotoIcon },
     { name: 'News', href: '/admin/news', icon: NewspaperIcon },
+    { name: 'Notices', href: '/admin/notices', icon: MegaphoneIcon },
     { name: 'Car Stickers', href: '/admin/car-stickers', icon: TicketIcon },
     { name: 'Adopt a Road', href: '/admin/adopt-a-road', icon: MapPinIcon },
     { name: 'Adopt a Gate', href: '/admin/adopt-a-gate', icon: BuildingOfficeIcon },
@@ -123,7 +128,7 @@ const AdminSidebar = () => {
           </nav>
 
           {/* Footer */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+          <div className="p-4 border-t border-gray-200 dark:border-gray-800 space-y-2">
             <Link
               href="/"
               className="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
@@ -131,6 +136,13 @@ const AdminSidebar = () => {
               <ArrowRightIcon className="w-5 h-5" />
               <span>Back to Site</span>
             </Link>
+            <button
+              onClick={() => logout()}
+              className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
+            >
+              <ArrowRightOnRectangleIcon className="w-5 h-5" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       </aside>

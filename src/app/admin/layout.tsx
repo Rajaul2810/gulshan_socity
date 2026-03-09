@@ -1,4 +1,5 @@
-import AdminSidebar from '@/Components/Admin/AdminSidebar'
+import { AdminAuthProvider } from '@/contexts/AdminAuthContext'
+import AdminAuthGuard from '@/Components/Admin/AdminAuthGuard'
 
 export default function AdminLayout({
   children,
@@ -6,14 +7,11 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <AdminSidebar />
-      <main className="lg:ml-64 min-h-screen">
-        <div className="p-4 lg:p-8">
-          {children}
-        </div>
-      </main>
-    </div>
+    <AdminAuthProvider>
+      <AdminAuthGuard>
+        {children}
+      </AdminAuthGuard>
+    </AdminAuthProvider>
   )
 }
 
