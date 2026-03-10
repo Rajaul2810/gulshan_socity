@@ -10,9 +10,10 @@ export default function Home() {
   return (
     <div>
       <Hero />
+      <Notices />
       <Services />
       <Events />
-      <Notices />
+
       <News />
       <TeamStats />
       <Media />
