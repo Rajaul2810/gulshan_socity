@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { importZone3Members } from '@/lib/utils/importZone3Members'
 
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const result = await importZone3Members()
     

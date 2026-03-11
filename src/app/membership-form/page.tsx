@@ -1316,7 +1316,7 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
   );
 }
 
-export default function MembershipForm(props: MembershipFormProps = {}) {
+export default function MembershipForm(props: MembershipFormProps = {} as MembershipFormProps) {
   return (
     <Suspense fallback={
       <div className="min-h-screen py-8 dark:bg-gray-900 bg-gray-50 flex items-center justify-center">

@@ -384,7 +384,7 @@ const Navber = () => {
             </Link>
             <Link
               href="/notice-page"
-              className="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-400 transition-colors duration-200 font-medium"
+              className="text-amber-500  transition-colors duration-200 font-medium"
             >
               Notice
             </Link>
@@ -601,6 +601,13 @@ const Navber = () => {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Events
+                </Link>
+                <Link
+                  href="/notice-page"
+                  className="block px-3 py-2 text-base font-medium text-amber-500  focus:text-primary-600 dark:focus:text-primary-400 focus:bg-gray-50 dark:focus:bg-gray-700 active:text-primary-600 dark:active:text-primary-400 active:bg-gray-50 dark:active:bg-gray-700 rounded-md transition-all duration-200 focus:outline-none"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Notice
                 </Link>
                 <Link
                   href="/contact"

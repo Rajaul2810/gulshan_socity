@@ -9,13 +9,13 @@ export async function GET(
 ) {
   try {
     const { id } = await params
-    const { data, error } = await supabaseServer
+    const { data, error: err } = await supabaseServer
       .from('notices')
       .select('*')
       .eq('id', id)
       .single()
 
-    if (error || !data) {
+    if (err || !data) {
       return NextResponse.json(
         { data: null, error: 'Notice not found' },
         { status: 404 }
