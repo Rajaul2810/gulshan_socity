@@ -333,7 +333,7 @@ const Footer = () => {
             </div>
 
             <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-2">Developed by: <Image src="/std.jpg" alt="SMART-Trend Digital" width={30} height={30} className="rounded-full" /> <span className="text-sm text-gray-300">SMART-Trend Digital</span></div>
+              <div className="flex items-center space-x-2 hover:text-blue-400 transition-colors duration-300">Developed by: <Image src="/Icon.png" alt="SMART-Trend Digital" width={30} height={30} className="rounded-full" /> <span className="text-sm text-gray-300">SMART-Trend Digital</span></div>
               <button
                 onClick={scrollToTop}
                 className="flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-xl transition-all duration-300 transform hover:-translate-y-1"
