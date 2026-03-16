@@ -19,6 +19,7 @@ import {
   DocumentCheckIcon,
   BuildingOffice2Icon,
   UserIcon,
+  ClockIcon,
   GlobeAltIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
