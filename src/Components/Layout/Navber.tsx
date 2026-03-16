@@ -116,7 +116,7 @@ const Navber = () => {
       {
          name: "Articles & Byelaws",
         href: "/about/articles",
-        icon: QuestionMarkCircleIcon,
+        icon: BuildingOffice2Icon,
         description:
           "Explore our foundation, mileposts, and the legacy of the organization.",
       },
