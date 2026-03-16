@@ -19,7 +19,6 @@ import {
   DocumentCheckIcon,
   BuildingOffice2Icon,
   UserIcon,
-  ClockIcon,
   GlobeAltIcon,
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -115,20 +114,20 @@ const Navber = () => {
           "Read about our guiding principles, objectives, and vision for the future.",
       },
       {
+         name: "Articles & Byelaws",
+        href: "/about/articles",
+        icon: QuestionMarkCircleIcon,
+        description:
+          "Explore our foundation, mileposts, and the legacy of the organization.",
+      },
+      {
         name: "Previous EC's",
         href: "/about/previous-ec",
         icon: UserGroupIcon,
         description:
           "See the list of earlier Executive Committee members who led the society.",
-      },
-       {
-         name: "Articles & Byelaws",
-        href: "/about/articles",
-        icon: ClockIcon,
-        description:
-          "Explore our foundation, mileposts, and the legacy of the organization.",
-       },
-    ],
+      }
+    ]
     membership: [
       {
         name: "Member List",
