@@ -127,7 +127,7 @@ const Navber = () => {
         description:
           "See the list of earlier Executive Committee members who led the society.",
       }
-    ]
+    ],
     membership: [
       {
         name: "Member List",
