@@ -120,13 +120,13 @@ const Navber = () => {
         description:
           "See the list of earlier Executive Committee members who led the society.",
       },
-      // {
-      //   name: "History",
-      //   href: "/about/history",
-      //   icon: ClockIcon,
-      //   description:
-      //     "Explore our foundation, mileposts, and the legacy of the organization.",
-      // },
+       {
+         name: "Articles & Byelaws",
+        href: "/about/articles",
+        icon: ClockIcon,
+        description:
+          "Explore our foundation, mileposts, and the legacy of the organization.",
+       },
     ],
     membership: [
       {
