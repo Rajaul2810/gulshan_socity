@@ -30,7 +30,7 @@ const TeamStats = () => {
     {
       id: 'registered-members',
       title: 'Registered Members',
-      count: 1284,
+      count: 2975,
       icon: UsersIcon,
       color: 'primary'
     },

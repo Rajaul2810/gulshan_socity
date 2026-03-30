@@ -13,7 +13,7 @@ import {
 
 const Hero = () => {
   const stats = [
-    { number: '5000+', label: 'Active Members' },
+    { number: '2975+', label: 'Active Members' },
     { number: '50+', label: 'Community Events' },
     { number: '15+', label: 'Years of Service' },
     { number: '100%', label: 'Community Focus' }
