@@ -10,7 +10,7 @@ import {
   PhoneIcon,
   EnvelopeIcon,
   MapPinIcon,
-  CalendarDaysIcon,
+  // CalendarDaysIcon,
   CheckCircleIcon,
   StarIcon,
   ChevronLeftIcon,
@@ -141,7 +141,7 @@ const MemberList = () => {
     }
   }
 
-  const formatDate = (dateString: string) => {
+  /*const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString)
       if (isNaN(date.getTime())) {
@@ -155,18 +155,10 @@ const MemberList = () => {
     } catch {
       return 'Invalid Date'
     }
-  }
+  }*/
 
   // Get unique zones from members
-  const availableZones = useMemo(() => {
-    const zones = new Set<string>()
-    members.forEach(member => {
-      if (member.zone) {
-        zones.add(member.zone)
-      }
-    })
-    return Array.from(zones).sort()
-  }, [members])
+  
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -228,9 +220,12 @@ const MemberList = () => {
                 className="px-4 py-3 border border-gray-300 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-colors duration-200"
               >
                 <option value="all">All Zones</option>
-                {availableZones.map(zone => (
-                  <option key={zone} value={zone}>{zone}</option>
-                ))}
+                <option value="Zone 1">Zone 1</option>
+                <option value="Zone 2">Zone 2</option>
+                <option value="Zone 3">Zone 3</option>
+                <option value="Zone 4">Zone 4</option>
+                <option value="Zone 5">Zone 5</option>
+                <option value="Zone 6">Zone 6</option>
               </select>
 
               <select
@@ -343,10 +338,10 @@ const MemberList = () => {
                           </div>
                         )}
                         
-                        {member.mobile && (
+                        {member.office_tel && (
                           <div className="flex items-center space-x-3">
                             <PhoneIcon className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">{member.mobile.slice(0, 4)} **** ****</span>
+                            <span className="text-sm text-gray-600">{member.office_tel?.slice(0, 4) || ''} **** ****</span>
                           </div>
                         )}
                         
@@ -357,14 +352,14 @@ const MemberList = () => {
                           </div>
                         )}
                         
-                        {member.membership_date && (
+                        {/* {member.membership_date && (
                           <div className="flex items-center space-x-3">
                             <CalendarDaysIcon className="w-4 h-4 text-gray-400" />
                             <span className="text-sm text-gray-600">
                               Joined {formatDate(member.membership_date)}
                             </span>
                           </div>
-                        )}
+                        )} */}
                       </div>
 
                       {/* <div className="mt-4 pt-4 border-t border-gray-200">

@@ -89,7 +89,7 @@ export async function importZone3Members(): Promise<{
   let skipped = 0
   
   try {
-    const csvPath = path.join(process.cwd(), 'src/lib/data/Zone-6.csv')
+    const csvPath = path.join(process.cwd(), 'src/lib/data/updatedZone-6.csv')
     const csvContent = fs.readFileSync(csvPath, 'utf-8')
     
     const members = parseZone3CSV(csvContent)

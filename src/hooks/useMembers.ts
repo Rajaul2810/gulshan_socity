@@ -18,6 +18,7 @@ export interface Member {
   photo_url?: string
   created_at?: string
   updated_at?: string
+  office_tel?: string
 }
 
 export const useMembers = (filters?: {
