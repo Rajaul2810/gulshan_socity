@@ -3,7 +3,7 @@ import { supabaseServer } from '@/lib/supabase/server'
 
 const BUCKET = 'notice-attachments'
 const MAX_IMAGE = 5 * 1024 * 1024   // 5MB
-const MAX_PDF = 10 * 1024 * 1024  // 10MB
+const MAX_PDF = 20 * 1024 * 1024  // 20MB
 const ALLOWED_IMAGE = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const ALLOWED_PDF = ['application/pdf']
 
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     const maxSize = isPdf ? MAX_PDF : MAX_IMAGE
     if (file.size > maxSize) {
       return NextResponse.json(
-        { data: null, error: isPdf ? 'PDF must be under 10MB' : 'Image must be under 5MB' },
+        { data: null, error: isPdf ? 'PDF must be under 20MB' : 'Image must be under 5MB' },
         { status: 400 }
       )
     }

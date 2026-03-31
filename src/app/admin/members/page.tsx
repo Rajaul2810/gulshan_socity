@@ -6,6 +6,7 @@ import {
   PencilIcon,
   TrashIcon,
   MagnifyingGlassIcon,
+  PrinterIcon,
   UserIcon,
   PhoneIcon,
   EnvelopeIcon,
@@ -50,6 +51,7 @@ const MembersPage = () => {
   const [applications, setApplications] = useState<MembershipApplication[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [selectedZone, setSelectedZone] = useState('all')
   const [showModal, setShowModal] = useState(false)
   const [editingMember, setEditingMember] = useState<Member | null>(null)
   const [formData, setFormData] = useState({
@@ -97,13 +99,82 @@ const MembersPage = () => {
     }
   }
 
-  const filteredMembers = members.filter(
-    (member) =>
+  const filteredMembers = members.filter((member) => {
+    const matchesSearch =
       member.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       member.mobile?.includes(searchTerm) ||
       member.membership_number?.includes(searchTerm)
-  )
+
+    const matchesZone = selectedZone === 'all' || member.zone === selectedZone
+    return matchesSearch && matchesZone
+  })
+
+  const handlePrintMembers = () => {
+    const printWindow = window.open('', '_blank', 'width=1200,height=800')
+    if (!printWindow) return
+
+    const title = selectedZone === 'all' ? 'All Zones' : selectedZone
+    const rows = filteredMembers
+      .map(
+        (member, index) => `
+          <tr>
+            <td>${index + 1}</td>
+            <td>${member.membership_number || ''}</td>
+            <td>${member.name || ''}</td>
+            <td>${member.membership_type || ''}</td>
+            <td>${member.zone || ''}</td>
+            <td>${member.office_tel || ''}</td>
+            <td>${member.email || ''}</td>
+            <td>${member.status || ''}</td>
+          </tr>
+        `
+      )
+      .join('')
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Members - ${title}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 24px; color: #111827; }
+            h1 { font-size: 22px; margin: 0 0 8px; }
+            .meta { margin-bottom: 16px; color: #4b5563; font-size: 14px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+            th, td { border: 1px solid #d1d5db; padding: 8px; font-size: 12px; text-align: left; vertical-align: top; }
+            th { background: #f3f4f6; font-weight: 600; }
+            @media print {
+              body { padding: 0; }
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Members List</h1>
+          <div class="meta">Zone: ${title} | Total: ${filteredMembers.length} | Printed: ${new Date().toLocaleString()}</div>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Membership No</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Zone</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `)
+    printWindow.document.close()
+    printWindow.focus()
+    printWindow.print()
+  }
 
   const handleOpenModal = (member?: Member) => {
     if (member) {
@@ -332,15 +403,43 @@ const MembersPage = () => {
         </div>
       )}
 
-      <div className="relative">
-        <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search members by name, email, phone, or membership number..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent"
-        />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        <div className="relative lg:col-span-7">
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search members by name, email, phone, or membership number..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent"
+          />
+        </div>
+        <div className="lg:col-span-3">
+          <select
+            value={selectedZone}
+            onChange={(e) => setSelectedZone(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent"
+          >
+            <option value="all">All Zones</option>
+            <option value="Zone 1">Zone 1</option>
+            <option value="Zone 2">Zone 2</option>
+            <option value="Zone 3">Zone 3</option>
+            <option value="Zone 4">Zone 4</option>
+            <option value="Zone 5">Zone 5</option>
+            <option value="Zone 6">Zone 6</option>
+          </select>
+        </div>
+        <div className="lg:col-span-2">
+          <button
+            type="button"
+            onClick={handlePrintMembers}
+            disabled={filteredMembers.length === 0}
+            className="w-full inline-flex items-center justify-center px-4 py-3 bg-gray-900 hover:bg-gray-700 text-white font-semibold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <PrinterIcon className="w-5 h-5 mr-2" />
+            Print
+          </button>
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
