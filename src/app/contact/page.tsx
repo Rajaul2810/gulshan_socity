@@ -154,7 +154,7 @@ const Contact = () => {
                     Send us an email anytime
                   </p>
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    gulshansociety@gmail.com
+                    gulshansociety@gmail.org
                   </p>
                 </div>
               </div>
@@ -173,7 +173,7 @@ const Contact = () => {
                     Visit our website
                   </p>
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    www.gulshansociety.com
+                    www.gulshansociety.org
                   </p>
                 </div>
               </div>

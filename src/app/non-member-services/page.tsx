@@ -100,13 +100,13 @@ const NonMemberServices = () => {
     {
       title: 'General Inquiry',
       phone: '+88-02-9881375',
-      email: 'gulshansociety@gmail.com',
+      email: 'gulshansociety@gmail.org',
       hours: '9 AM - 6 PM (Mon-Fri)',
       icon: PhoneIcon
     },
     {
       title: 'Email Support',
-      email: 'gulshansociety@gmail.com',
+      email: 'gulshansociety@gmail.org',
       hours: 'Response within 48 hours',
       icon: EnvelopeIcon
     },

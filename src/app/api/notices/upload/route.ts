@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase/server'
+import {
+  NOTICE_MAX_IMAGE_BYTES,
+  NOTICE_MAX_PDF_BYTES,
+} from '@/lib/notice-limits'
 
 const BUCKET = 'notice-attachments'
-const MAX_IMAGE = 5 * 1024 * 1024   // 5MB
-const MAX_PDF = 20 * 1024 * 1024  // 20MB
 const ALLOWED_IMAGE = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 const ALLOWED_PDF = ['application/pdf']
 
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const maxSize = isPdf ? MAX_PDF : MAX_IMAGE
+    const maxSize = isPdf ? NOTICE_MAX_PDF_BYTES : NOTICE_MAX_IMAGE_BYTES
     if (file.size > maxSize) {
       return NextResponse.json(
         { data: null, error: isPdf ? 'PDF must be under 20MB' : 'Image must be under 5MB' },

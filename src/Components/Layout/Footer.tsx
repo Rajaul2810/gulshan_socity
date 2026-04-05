@@ -60,7 +60,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <EnvelopeIcon className="w-5 h-5 text-blue-400" />
-                <span className="text-sm">info@gulshansociety.com</span>
+                <span className="text-sm">info@gulshansociety.org</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <ClockIcon className="w-5 h-5 text-blue-400" />

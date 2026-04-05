@@ -29,7 +29,7 @@ const About = () => {
             </h1>
             
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              For over 15 years, Gulshan Society has been dedicated to fostering a vibrant, 
+              For over 24 years, Gulshan Society has been dedicated to fostering a vibrant, 
               inclusive community where neighbors become family and together we create a brighter future.
             </p>
             

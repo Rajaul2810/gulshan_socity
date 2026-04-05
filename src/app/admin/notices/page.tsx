@@ -13,6 +13,11 @@ import {
   DocumentArrowDownIcon,
 } from "@heroicons/react/24/outline";
 import { Notice, NoticeCategory } from "@/hooks/useNotices";
+import {
+  uploadNoticeAttachment,
+  noticeFileErrorMessage,
+  isValidNoticeAttachmentType,
+} from "@/lib/notice-upload";
 
 const CATEGORIES: NoticeCategory[] = [
   "Security Notice",
@@ -113,14 +118,13 @@ export default function AdminNoticesPage() {
   const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const ok =
-        file.type.startsWith("image/") || file.type === "application/pdf";
-      if (!ok) {
-        setError("Only images and PDF are allowed");
+      if (!isValidNoticeAttachmentType(file)) {
+        setError("Only PDF and images (JPEG, PNG, WebP) are allowed");
         return;
       }
-      if (file.size > 20 * 1024 * 1024) {
-        setError("File must be under 20MB");
+      const sizeErr = noticeFileErrorMessage(file);
+      if (sizeErr) {
+        setError(sizeErr);
         return;
       }
       setAttachmentFile(file);
@@ -136,16 +140,10 @@ export default function AdminNoticesPage() {
       let attachment_url = form.attachment_url;
       let attachment_name = form.attachment_name;
       if (attachmentFile) {
-        const fd = new FormData();
-        fd.append("file", attachmentFile);
-        const up = await fetch("/api/notices/upload", {
-          method: "POST",
-          body: fd,
-        });
-        const upJson = await up.json();
-        if (upJson.error) throw new Error(upJson.error);
-        attachment_url = upJson.data.url;
-        attachment_name = upJson.data.name || attachmentFile.name;
+        const up = await uploadNoticeAttachment(attachmentFile);
+        if ("error" in up) throw new Error(up.error);
+        attachment_url = up.url;
+        attachment_name = up.name;
       }
       const body = {
         title: form.title,
@@ -514,7 +512,7 @@ export default function AdminNoticesPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Attachment (PDF or image, max 20MB)
+                    Attachment (PDF max 20MB; images max 5MB)
                   </label>
                   <input
                     type="file"

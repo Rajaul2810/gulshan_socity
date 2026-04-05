@@ -2,6 +2,10 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
+  uploadMembershipFile,
+  membershipFileErrorMessage,
+} from "@/lib/membership-upload";
+import {
   UserIcon,
   EnvelopeIcon,
   BuildingOffice2Icon,
@@ -123,6 +127,7 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  const [fileError, setFileError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Load application data if applicationId is provided
@@ -210,17 +215,21 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files } = e.target;
     if (files && files[0]) {
-      // Validate file size (max 5MB)
-      if (files[0].size > 5 * 1024 * 1024) {
-        alert(`File ${files[0].name} is too large. Maximum size is 5MB.`);
+      const sizeMsg = membershipFileErrorMessage(files[0]);
+      if (sizeMsg) {
+        setFileError(sizeMsg);
         return;
       }
-      // Validate file type (images or PDFs)
-      const isValidFile = files[0].type.startsWith('image/') || files[0].type === 'application/pdf';
+      const isValidFile =
+        files[0].type.startsWith("image/") ||
+        files[0].type === "application/pdf";
       if (!isValidFile) {
-        alert(`File ${files[0].name} is not a valid file type. Please upload an image (JPG, PNG) or PDF.`);
+        setFileError(
+          "Please upload an image (JPG, PNG) or a PDF file."
+        );
         return;
       }
+      setFileError(null);
       setFormData((prev) => ({ ...prev, [name]: files[0] }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: null }));
@@ -254,6 +263,7 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus("idle");
+    setFileError(null);
 
     try {
       if (adminMode) {
@@ -323,32 +333,14 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
           membership_date: new Date().toISOString().split('T')[0],
         };
 
-        // Helper function to upload documents using the main API route approach
-        const uploadDocument = async (file: File | null, folder: string): Promise<string | null> => {
+        const uploadDocument = async (
+          file: File | null,
+          folder: string
+        ): Promise<string | null> => {
           if (!file) return null;
-          
-          try {
-            // Create FormData with file and folder
-            const uploadFormData = new FormData();
-            uploadFormData.append('file', file);
-            uploadFormData.append('folder', folder);
-            
-            // Use the upload-image endpoint (now supports PDFs and custom folders)
-            const uploadRes = await fetch('/api/membership/upload-image', {
-              method: 'POST',
-              body: uploadFormData,
-            });
-            
-            const uploadResult = await uploadRes.json();
-            if (uploadResult.error) {
-              console.error(`Error uploading ${folder}:`, uploadResult.error);
-              return null;
-            }
-            return uploadResult.data?.url || null;
-          } catch (error) {
-            console.error(`Error uploading ${folder}:`, error);
-            return null;
-          }
+          const r = await uploadMembershipFile(file, folder);
+          if ("error" in r) throw new Error(r.error);
+          return r.url;
         };
 
         // Upload all documents
@@ -396,6 +388,7 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
         }
 
         setSubmitStatus("success");
+        setFileError(null);
         setTimeout(() => {
           if (adminMode) {
             router.push('/admin/members');
@@ -440,28 +433,63 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
           }
         }, 2000);
       } else {
-        // Public mode: Submit application
+        const uploadDoc = async (
+          file: File | null,
+          folder: string
+        ): Promise<string | null> => {
+          if (!file) return null;
+          const r = await uploadMembershipFile(file, folder);
+          if ("error" in r) throw new Error(r.error);
+          return r.url;
+        };
+
+        const photoUrl = formData.photo
+          ? await uploadDoc(formData.photo, "photos")
+          : null;
+        const nidUrl = formData.nid
+          ? await uploadDoc(formData.nid, "nid")
+          : null;
+        const taxReceiptUrl = formData.taxReceipt
+          ? await uploadDoc(formData.taxReceipt, "tax-receipts")
+          : null;
+        const leaseAgreementUrl = formData.leaseAgreement
+          ? await uploadDoc(formData.leaseAgreement, "lease-agreements")
+          : null;
+        const tradeLicenseUrl = formData.tradeLicense
+          ? await uploadDoc(formData.tradeLicense, "trade-licenses")
+          : null;
+        const tinBinCertificateUrl = formData.tinBinCertificate
+          ? await uploadDoc(formData.tinBinCertificate, "certificates")
+          : null;
+
         const payload = new FormData();
-        
-        // Add all text fields
+
         Object.entries(formData).forEach(([key, value]) => {
-          if (key === 'children') {
+          if (key === "children") {
             payload.append(key, JSON.stringify(value));
-          } else if (key === 'declaration') {
-            payload.append(key, value ? 'true' : 'false');
-          } else if (key !== 'photo' && key !== 'nid' && key !== 'taxReceipt' && 
-                     key !== 'leaseAgreement' && key !== 'tradeLicense' && key !== 'tinBinCertificate') {
+          } else if (key === "declaration") {
+            payload.append(key, value ? "true" : "false");
+          } else if (
+            key !== "photo" &&
+            key !== "nid" &&
+            key !== "taxReceipt" &&
+            key !== "leaseAgreement" &&
+            key !== "tradeLicense" &&
+            key !== "tinBinCertificate"
+          ) {
             if (value) payload.append(key, value as string);
           }
         });
-        
-        // Add all document files
-        if (formData.photo) payload.append('photo', formData.photo);
-        if (formData.nid) payload.append('nid', formData.nid);
-        if (formData.taxReceipt) payload.append('taxReceipt', formData.taxReceipt);
-        if (formData.leaseAgreement) payload.append('leaseAgreement', formData.leaseAgreement);
-        if (formData.tradeLicense) payload.append('tradeLicense', formData.tradeLicense);
-        if (formData.tinBinCertificate) payload.append('tinBinCertificate', formData.tinBinCertificate);
+
+        if (photoUrl) payload.append("photo_url", photoUrl);
+        if (nidUrl) payload.append("nid_url", nidUrl);
+        if (taxReceiptUrl) payload.append("tax_receipt_url", taxReceiptUrl);
+        if (leaseAgreementUrl)
+          payload.append("lease_agreement_url", leaseAgreementUrl);
+        if (tradeLicenseUrl)
+          payload.append("trade_license_url", tradeLicenseUrl);
+        if (tinBinCertificateUrl)
+          payload.append("tin_bin_certificate_url", tinBinCertificateUrl);
 
         const res = await fetch("/api/membership", {
           method: "POST",
@@ -470,6 +498,7 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
 
         if (res.ok) {
           setSubmitStatus("success");
+          setFileError(null);
           setTimeout(() => {
             setFormData({
               membershipType: "",
@@ -509,11 +538,25 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }, 3000);
         } else {
+          let errMsg =
+            "Could not submit your application. Please try again.";
+          try {
+            const j = await res.json();
+            if (j?.error && typeof j.error === "string") errMsg = j.error;
+          } catch {
+            /* ignore */
+          }
+          setFileError(errMsg);
           setSubmitStatus("error");
         }
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
+      setFileError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      );
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -564,11 +607,12 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
           </div>
         )}
 
-        {submitStatus === "error" && (
+        {(submitStatus === "error" || fileError) && (
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center space-x-3">
-            <ExclamationTriangleIcon className="w-5 h-5 text-red-500" />
+            <ExclamationTriangleIcon className="w-5 h-5 text-red-500 shrink-0" />
             <span className="text-red-700 dark:text-red-300 font-medium">
-              Something went wrong. Please try again or contact support.
+              {fileError ||
+                "Something went wrong. Please try again or contact support."}
             </span>
           </div>
         )}
@@ -1201,7 +1245,9 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
                 {formData.nid && (
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.nid.name}</p>
                 )}
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Image or PDF. Images max 5MB; PDFs max 20MB.
+                </p>
               </div>
 
               {/* Tax Receipt - Required for all */}
@@ -1220,7 +1266,9 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
                 {formData.taxReceipt && (
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.taxReceipt.name}</p>
                 )}
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Image or PDF. Images max 5MB; PDFs max 20MB.
+                </p>
               </div>
 
               {/* Lease Agreement - Required for Associate Membership */}
@@ -1243,7 +1291,9 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
                   {formData.leaseAgreement && (
                     <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.leaseAgreement.name}</p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    Image or PDF. Images max 5MB; PDFs max 20MB.
+                  </p>
                 </div>
               )}
 
@@ -1265,7 +1315,9 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
                     {formData.tradeLicense && (
                       <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.tradeLicense.name}</p>
                     )}
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      Image or PDF. Images max 5MB; PDFs max 20MB.
+                    </p>
                   </div>
 
                   <div>
@@ -1283,7 +1335,9 @@ function MembershipFormContent({ isAdmin = false, applicationId }: MembershipFor
                     {formData.tinBinCertificate && (
                       <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{formData.tinBinCertificate.name}</p>
                     )}
-                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Image or PDF. Max size: 5MB</p>
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      Image or PDF. Images max 5MB; PDFs max 20MB.
+                    </p>
                   </div>
                 </>
               )}

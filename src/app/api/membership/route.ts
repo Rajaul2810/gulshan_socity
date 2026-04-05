@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase/server'
+import {
+  MEMBERSHIP_MAX_IMAGE_BYTES,
+  MEMBERSHIP_MAX_PDF_BYTES,
+} from '@/lib/membership-limits'
+
+function urlFromForm(formData: FormData, key: string): string | null {
+  const v = formData.get(key)
+  return typeof v === 'string' && v.trim().startsWith('http') ? v.trim() : null
+}
 
 // POST create new membership application
 export async function POST(request: NextRequest) {
@@ -69,10 +78,12 @@ export async function POST(request: NextRequest) {
         return null
       }
 
-      // Validate file size (max 5MB)
-      const maxSize = 5 * 1024 * 1024 // 5MB
+      const maxSize =
+        file.type === 'application/pdf'
+          ? MEMBERSHIP_MAX_PDF_BYTES
+          : MEMBERSHIP_MAX_IMAGE_BYTES
       if (file.size > maxSize) {
-        console.warn(`File ${file.name} exceeds 5MB limit, skipping upload`)
+        console.warn(`File ${file.name} exceeds size limit, skipping upload`)
         return null
       }
 
@@ -108,30 +119,41 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Upload all document files
-    const photoUrl = formData.get('photo') instanceof File 
-      ? await uploadFile(formData.get('photo') as File, 'photos')
-      : null
+    const photoUrl =
+      urlFromForm(formData, 'photo_url') ??
+      (formData.get('photo') instanceof File
+        ? await uploadFile(formData.get('photo') as File, 'photos')
+        : null)
 
-    const nidUrl = formData.get('nid') instanceof File 
-      ? await uploadFile(formData.get('nid') as File, 'nid')
-      : null
+    const nidUrl =
+      urlFromForm(formData, 'nid_url') ??
+      (formData.get('nid') instanceof File
+        ? await uploadFile(formData.get('nid') as File, 'nid')
+        : null)
 
-    const taxReceiptUrl = formData.get('taxReceipt') instanceof File 
-      ? await uploadFile(formData.get('taxReceipt') as File, 'tax-receipts')
-      : null
+    const taxReceiptUrl =
+      urlFromForm(formData, 'tax_receipt_url') ??
+      (formData.get('taxReceipt') instanceof File
+        ? await uploadFile(formData.get('taxReceipt') as File, 'tax-receipts')
+        : null)
 
-    const leaseAgreementUrl = formData.get('leaseAgreement') instanceof File 
-      ? await uploadFile(formData.get('leaseAgreement') as File, 'lease-agreements')
-      : null
+    const leaseAgreementUrl =
+      urlFromForm(formData, 'lease_agreement_url') ??
+      (formData.get('leaseAgreement') instanceof File
+        ? await uploadFile(formData.get('leaseAgreement') as File, 'lease-agreements')
+        : null)
 
-    const tradeLicenseUrl = formData.get('tradeLicense') instanceof File 
-      ? await uploadFile(formData.get('tradeLicense') as File, 'trade-licenses')
-      : null
+    const tradeLicenseUrl =
+      urlFromForm(formData, 'trade_license_url') ??
+      (formData.get('tradeLicense') instanceof File
+        ? await uploadFile(formData.get('tradeLicense') as File, 'trade-licenses')
+        : null)
 
-    const tinBinCertificateUrl = formData.get('tinBinCertificate') instanceof File 
-      ? await uploadFile(formData.get('tinBinCertificate') as File, 'certificates')
-      : null
+    const tinBinCertificateUrl =
+      urlFromForm(formData, 'tin_bin_certificate_url') ??
+      (formData.get('tinBinCertificate') instanceof File
+        ? await uploadFile(formData.get('tinBinCertificate') as File, 'certificates')
+        : null)
 
     // Insert application into database
     const { data, error } = await supabaseServer

@@ -1,0 +1,2 @@
+export const NOTICE_MAX_IMAGE_BYTES = 5 * 1024 * 1024
+export const NOTICE_MAX_PDF_BYTES = 20 * 1024 * 1024

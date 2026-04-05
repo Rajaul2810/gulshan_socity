@@ -15,7 +15,7 @@ const Hero = () => {
   const stats = [
     { number: '2975+', label: 'Active Members' },
     { number: '50+', label: 'Community Events' },
-    { number: '15+', label: 'Years of Service' },
+    { number: '24+', label: 'Years of Service' },
     { number: '100%', label: 'Community Focus' }
   ]
 
@@ -143,7 +143,7 @@ const Hero = () => {
 
                 <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
                   <UsersIcon className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-medium">Growing Community Since 2008</span>
+                  <span className="text-sm font-medium">Gulshan Society was established in 2002</span>
                 </div>
               </div>
             </div>

@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase/server'
+import {
+  MEMBERSHIP_MAX_IMAGE_BYTES,
+  MEMBERSHIP_MAX_PDF_BYTES,
+} from '@/lib/membership-limits'
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,11 +27,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Validate file size (5MB limit)
-    const maxSize = 5 * 1024 * 1024 // 5MB
+    const maxSize =
+      file.type === 'application/pdf'
+        ? MEMBERSHIP_MAX_PDF_BYTES
+        : MEMBERSHIP_MAX_IMAGE_BYTES
     if (file.size > maxSize) {
       return NextResponse.json(
-        { data: null, error: 'File size exceeds 5MB limit' },
+        {
+          data: null,
+          error:
+            file.type === 'application/pdf'
+              ? 'PDF must be 20MB or smaller'
+              : 'Image must be 5MB or smaller',
+        },
         { status: 400 }
       )
     }
