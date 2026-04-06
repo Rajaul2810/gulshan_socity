@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
       .from('notices')
       .select('*')
       .order('is_pinned', { ascending: false })
+      .order('sort_order', { ascending: true })
       .order('publish_date', { ascending: false })
 
     if (statusParam === 'active' || statusParam === 'inactive') {
@@ -91,6 +92,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const { data: maxRows } = await supabaseServer
+      .from('notices')
+      .select('sort_order')
+      .order('sort_order', { ascending: false })
+      .limit(1)
+    const nextSort =
+      maxRows && maxRows.length > 0 && typeof maxRows[0].sort_order === 'number'
+        ? maxRows[0].sort_order + 1
+        : 0
+
     const { data, error } = await supabaseServer
       .from('notices')
       .insert({
@@ -105,6 +116,7 @@ export async function POST(request: NextRequest) {
         attachment_name: attachment_name || null,
         status: status === 'inactive' ? 'inactive' : 'active',
         is_pinned: !!is_pinned,
+        sort_order: nextSort,
       })
       .select()
       .single()

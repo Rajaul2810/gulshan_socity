@@ -9,7 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNotices, Notice, NoticeCategory } from "@/hooks/useNotices";
 
-const LIMIT = 5;
+const LIMIT = 6;
 
 function getCategoryBadgeClass(category: NoticeCategory): string {
   const map: Record<NoticeCategory, string> = {
@@ -130,7 +130,7 @@ export default function Notices() {
         {!loading && !error && notices.length > 0 && (
           <>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-              {notices.slice(0, 5).map((notice) => (
+              {notices.slice(0, 6).map((notice) => (
                 <NoticeCard key={notice.id} notice={notice} />
               ))}
             </div>

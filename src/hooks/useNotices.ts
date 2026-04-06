@@ -25,6 +25,7 @@ export interface Notice {
   attachment_name: string | null
   status: string
   is_pinned: boolean
+  sort_order?: number
   created_at?: string
   updated_at?: string
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   PlusIcon,
   PencilIcon,
@@ -11,6 +11,8 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   DocumentArrowDownIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
 } from "@heroicons/react/24/outline";
 import { Notice, NoticeCategory } from "@/hooks/useNotices";
 import {
@@ -40,6 +42,7 @@ const defaultForm = {
   is_pinned: false,
   attachment_url: "",
   attachment_name: "",
+  sort_order: 0,
 };
 
 export default function AdminNoticesPage() {
@@ -53,10 +56,11 @@ export default function AdminNoticesPage() {
   const [uploading, setUploading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [reordering, setReordering] = useState(false);
 
-  const fetchNotices = async () => {
+  const fetchNotices = async (opts?: { silent?: boolean }) => {
     try {
-      setLoading(true);
+      if (!opts?.silent) setLoading(true);
       const res = await fetch("/api/notices?status=");
       const json = await res.json();
       if (json.error) throw new Error(json.error);
@@ -65,7 +69,7 @@ export default function AdminNoticesPage() {
       setNotices([]);
       setError(e instanceof Error ? e.message : "Failed to load notices");
     } finally {
-      setLoading(false);
+      if (!opts?.silent) setLoading(false);
     }
   };
 
@@ -73,12 +77,57 @@ export default function AdminNoticesPage() {
     fetchNotices();
   }, []);
 
-  const filtered = notices.filter(
-    (n) =>
-      n.title.toLowerCase().includes(search.toLowerCase()) ||
-      n.description.toLowerCase().includes(search.toLowerCase()) ||
-      n.category.toLowerCase().includes(search.toLowerCase()),
-  );
+  const orderedNotices = useMemo(() => {
+    return [...notices].sort((a, b) => {
+      if (a.is_pinned !== b.is_pinned) return a.is_pinned ? -1 : 1;
+      const ao = a.sort_order ?? 0;
+      const bo = b.sort_order ?? 0;
+      if (ao !== bo) return ao - bo;
+      return (
+        new Date(b.publish_date).getTime() -
+        new Date(a.publish_date).getTime()
+      );
+    });
+  }, [notices]);
+
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return orderedNotices;
+    return orderedNotices.filter(
+      (n) =>
+        n.title.toLowerCase().includes(q) ||
+        n.description.toLowerCase().includes(q) ||
+        n.category.toLowerCase().includes(q),
+    );
+  }, [orderedNotices, search]);
+
+  const canReorder = !search.trim();
+
+  const moveNotice = async (id: string, direction: "up" | "down") => {
+    const list = [...orderedNotices];
+    const i = list.findIndex((n) => n.id === id);
+    if (i === -1) return;
+    const j = direction === "up" ? i - 1 : i + 1;
+    if (j < 0 || j >= list.length) return;
+    const ids = list.map((n) => n.id);
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+    setReordering(true);
+    setError("");
+    try {
+      const res = await fetch("/api/notices/reorder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderedIds: ids }),
+      });
+      const json = await res.json();
+      if (json.error) throw new Error(json.error);
+      await fetchNotices({ silent: true });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to reorder");
+    } finally {
+      setReordering(false);
+    }
+  };
 
   const openModal = (notice?: Notice) => {
     setEditing(notice || null);
@@ -95,6 +144,7 @@ export default function AdminNoticesPage() {
         is_pinned: notice.is_pinned,
         attachment_url: notice.attachment_url || "",
         attachment_name: notice.attachment_name || "",
+        sort_order: notice.sort_order ?? 0,
       });
     } else {
       setForm({
@@ -145,7 +195,7 @@ export default function AdminNoticesPage() {
         attachment_url = up.url;
         attachment_name = up.name;
       }
-      const body = {
+      const body: Record<string, unknown> = {
         title: form.title,
         description: form.description,
         short_description: form.short_description || null,
@@ -161,6 +211,7 @@ export default function AdminNoticesPage() {
         attachment_name: attachment_name || null,
       };
       if (editing) {
+        body.sort_order = form.sort_order;
         const res = await fetch(`/api/notices/${editing.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -248,15 +299,22 @@ export default function AdminNoticesPage() {
         </div>
       )}
 
-      <div className="relative">
-        <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search notices..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
-        />
+      <div>
+        <div className="relative">
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search notices..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+          />
+        </div>
+        {search.trim() && (
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            Clear search to change the public display order (move up/down).
+          </p>
+        )}
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -288,7 +346,11 @@ export default function AdminNoticesPage() {
           </div>
         ) : (
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-            {filtered.map((notice) => (
+            {filtered.map((notice) => {
+              const orderIdx = orderedNotices.findIndex(
+                (n) => n.id === notice.id,
+              );
+              return (
               <li
                 key={notice.id}
                 className="p-4 sm:p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
@@ -339,6 +401,33 @@ export default function AdminNoticesPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
+                    {canReorder && orderIdx >= 0 && (
+                      <div className="flex flex-col border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() => moveNotice(notice.id, "up")}
+                          disabled={
+                            reordering || orderIdx === 0
+                          }
+                          title="Move up"
+                          className="p-1.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <ArrowUpIcon className="w-5 h-5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => moveNotice(notice.id, "down")}
+                          disabled={
+                            reordering ||
+                            orderIdx === orderedNotices.length - 1
+                          }
+                          title="Move down"
+                          className="p-1.5 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border-t border-gray-200 dark:border-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <ArrowDownIcon className="w-5 h-5" />
+                        </button>
+                      </div>
+                    )}
                     <button
                       onClick={() => openModal(notice)}
                       className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg"
@@ -356,7 +445,8 @@ export default function AdminNoticesPage() {
                   </div>
                 </div>
               </li>
-            ))}
+            );
+            })}
           </ul>
         )}
       </div>
@@ -531,6 +621,33 @@ export default function AdminNoticesPage() {
                     </p>
                   )}
                 </div>
+                {editing && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Display order
+                    </label>
+                    <input
+                      type="number"
+                      min={0}
+                      step={1}
+                      value={form.sort_order}
+                      onChange={(e) =>
+                        setForm((f) => ({
+                          ...f,
+                          sort_order: Math.max(
+                            0,
+                            parseInt(e.target.value, 10) || 0,
+                          ),
+                        }))
+                      }
+                      className="w-full max-w-xs px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      Lower numbers appear higher on the home and notice pages
+                      (pinned notices still show first).
+                    </p>
+                  </div>
+                )}
                 <div className="flex flex-wrap items-center gap-4">
                   <label className="inline-flex items-center gap-2 cursor-pointer">
                     <input

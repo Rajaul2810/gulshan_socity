@@ -49,6 +49,7 @@ export async function PATCH(
       attachment_name,
       status,
       is_pinned,
+      sort_order,
     } = body
 
     const updates: Record<string, unknown> = {}
@@ -63,6 +64,10 @@ export async function PATCH(
     if (attachment_name !== undefined) updates.attachment_name = attachment_name
     if (status !== undefined) updates.status = status
     if (is_pinned !== undefined) updates.is_pinned = is_pinned
+    if (sort_order !== undefined) {
+      const n = Number(sort_order)
+      if (Number.isFinite(n)) updates.sort_order = Math.trunc(n)
+    }
 
     const { data, error } = await supabaseServer
       .from('notices')

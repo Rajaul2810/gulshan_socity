@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS notices (
   attachment_name TEXT,
   created_by UUID,
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
-  is_pinned BOOLEAN DEFAULT false
+  is_pinned BOOLEAN DEFAULT false,
+  sort_order INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_notices_status ON notices(status);
@@ -32,6 +33,7 @@ CREATE INDEX IF NOT EXISTS idx_notices_publish_date ON notices(publish_date DESC
 CREATE INDEX IF NOT EXISTS idx_notices_category ON notices(category);
 CREATE INDEX IF NOT EXISTS idx_notices_priority ON notices(priority);
 CREATE INDEX IF NOT EXISTS idx_notices_is_pinned ON notices(is_pinned) WHERE is_pinned = true;
+CREATE INDEX IF NOT EXISTS idx_notices_sort_order ON notices(sort_order);
 
 -- Update trigger
 CREATE OR REPLACE FUNCTION update_notices_updated_at()
