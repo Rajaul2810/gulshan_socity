@@ -467,12 +467,12 @@ const MemberList = () => {
                 </div>
                 <div className="text-gray-600">Zones</div>
               </div>
-              <div className="text-center">
+              {/* <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-2">
-                  {members.filter(m => m.membership_type === 'Life').length}
+                  {members.filter(m => m.status === 'active').length}
                 </div>
-                <div className="text-gray-600">Life Members</div>
-              </div>
+                <div className="text-gray-600">Active Members</div>
+              </div> */}
             </div>
           </div>
         </section>
