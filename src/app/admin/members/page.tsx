@@ -24,6 +24,8 @@ interface Member {
   name: string
   email?: string
   mobile?: string
+  office_tel?: string
+  residence_address?: string
   property_schedule?: string
   membership_date: string
   status: 'active' | 'inactive' | 'suspended'
@@ -60,9 +62,8 @@ const MembersPage = () => {
     zone: '',
     name: '',
     email: '',
-    mobile: '',
-    houseNumber: '',
-    roadNumber: '',
+    office_tel: '',
+    residence_address: '',
     membership_date: new Date().toISOString().split('T')[0],
     status: 'active' as 'active' | 'inactive' | 'suspended',
   })
@@ -103,9 +104,8 @@ const MembersPage = () => {
     const matchesSearch =
       member.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.mobile?.includes(searchTerm) ||
+      member.office_tel?.includes(searchTerm) ||
       member.membership_number?.includes(searchTerm)
-
     const matchesZone = selectedZone === 'all' || member.zone === selectedZone
     return matchesSearch && matchesZone
   })
@@ -179,16 +179,14 @@ const MembersPage = () => {
   const handleOpenModal = (member?: Member) => {
     if (member) {
       setEditingMember(member)
-      const propertyParts = member.property_schedule?.split(',') || []
       setFormData({
         membership_number: member.membership_number || '',
         membership_type: member.membership_type || '',
         zone: member.zone || '',
         name: member.name || '',
         email: member.email || '',
-        mobile: member.mobile || '',
-        houseNumber: propertyParts[0] || '',
-        roadNumber: propertyParts[1] || '',
+        office_tel: member.office_tel || '',
+        residence_address:member.residence_address ||'',
         membership_date: member.membership_date?.split('T')[0] || new Date().toISOString().split('T')[0],
         status: member.status || 'active',
       })
@@ -200,9 +198,8 @@ const MembersPage = () => {
         zone: '',
         name: '',
         email: '',
-        mobile: '',
-        houseNumber: '',
-        roadNumber: '',
+        office_tel: '',
+        residence_address:'',
         membership_date: new Date().toISOString().split('T')[0],
         status: 'active',
       })
@@ -221,17 +218,7 @@ const MembersPage = () => {
     setSuccessMessage('')
     
     try {
-      const propertySchedule = formData.houseNumber || formData.roadNumber
-        ? `${formData.houseNumber || ''},${formData.roadNumber || ''}`.replace(/^,|,$/g, '')
-        : null
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { houseNumber, roadNumber, ...formDataWithoutProperty } = formData
-      const memberData = {
-        ...formDataWithoutProperty,
-        membership_date: formData.membership_date,
-        property_schedule: propertySchedule,
-      }
+      const memberData = { ...formData }
 
       let response
       if (editingMember) {
@@ -685,35 +672,23 @@ const MembersPage = () => {
                   </label>
                   <input
                     type="tel"
-                    value={formData.mobile}
+                    value={formData.office_tel}
                     onChange={(e) =>
-                      setFormData({ ...formData, mobile: e.target.value })
+                      setFormData({ ...formData, office_tel: e.target.value })
                     }
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    House Number
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.houseNumber}
-                    onChange={(e) =>
-                      setFormData({ ...formData, houseNumber: e.target.value })
-                    }
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div>
+               
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Road Number
                   </label>
-                  <input
-                    type="text"
-                    value={formData.roadNumber}
+                  <textarea
+                    rows={4}
+                    value={formData.residence_address}
                     onChange={(e) =>
-                      setFormData({ ...formData, roadNumber: e.target.value })
+                      setFormData({ ...formData, residence_address: e.target.value })
                     }
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
