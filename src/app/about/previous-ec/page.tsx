@@ -98,7 +98,7 @@ const PreviousEC = () => {
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {committee.committee_term.split(' ').slice(0, 1).join(' ')}
+                  {committee.committee_term.split(' ').slice(0, 1).join(' ')}  {gulshanSocietyCommittees[0].committee_term === committee.committee_term ? 'Current' : ''}
                 </button>
               ))}
             </div>

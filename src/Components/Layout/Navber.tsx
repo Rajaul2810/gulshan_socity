@@ -114,6 +114,27 @@ const Navber = () => {
           "Read about our guiding principles, objectives, and vision for the future.",
       },
       {
+        name: "12 Executive Committee(2026-2028)",
+        href: "/about/12-executive-committee",
+        icon: UserGroupIcon,
+        description:
+          "See the list of the current Executive Committee members who lead the society.",
+      },
+      {
+        name: "Standing Committees(2026-2028)",
+        href: "/about/standing-committees",
+        icon: UserGroupIcon,
+        description:
+          "See the list of the current Standing Committees members who are responsible for the various activities of the society.",
+      },
+      {
+        name: "Zonal Committees(2026-2028)",
+        href: "/about/zonal-committees",
+        icon: UserGroupIcon,
+        description:
+          "See the list of the current Zonal Committees members who are responsible for the various activities of the society.",
+      },
+      {
          name: "Articles & Byelaws",
         href: "/about/history",
         icon: BuildingOffice2Icon,
