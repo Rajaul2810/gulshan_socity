@@ -28,14 +28,14 @@ export async function GET(request: NextRequest) {
 
     const pageSize = 1000
     let from = 0
-    const allRows: Record<string, unknown>[] = []
+    const allRows: unknown[] = []
 
     while (true) {
       const { data, error } = await query.range(from, from + pageSize - 1)
       if (error) throw error
 
       if (!data || data.length === 0) break
-      allRows.push(...(data as Record<string, unknown>[]))
+      allRows.push(...data)
 
       if (data.length < pageSize) break
       from += pageSize

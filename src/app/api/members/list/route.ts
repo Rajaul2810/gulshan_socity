@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase/server'
-import { PUBLIC_MEMBER_COLUMNS } from '@/lib/members-public'
+import { stripMembersContactPii } from '@/lib/members-public'
 
 // GET public members list (no email / phone / office_tel)
 export async function GET(request: NextRequest) {
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabaseServer
       .from('members')
-      .select(PUBLIC_MEMBER_COLUMNS)
+      .select('*')
       .order('created_at', { ascending: false })
 
     if (status) {
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       if (error) throw error
 
       if (!data || data.length === 0) break
-      allRows.push(...(data as Record<string, unknown>[]))
+      allRows.push(...stripMembersContactPii(data))
 
       if (data.length < pageSize) break
       from += pageSize

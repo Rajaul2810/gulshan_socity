@@ -26,7 +26,7 @@ export async function GET(
     }
 
     return NextResponse.json({
-      data: stripMemberContactPii(data as Record<string, unknown>),
+      data: stripMemberContactPii(data),
       error: null,
     })
   } catch (error) {
