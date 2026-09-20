@@ -7,10 +7,7 @@ import {
   UserGroupIcon,
   MagnifyingGlassIcon,
   UserCircleIcon,
-  PhoneIcon,
-  EnvelopeIcon,
   MapPinIcon,
-  // CalendarDaysIcon,
   CheckCircleIcon,
   StarIcon,
   ChevronLeftIcon,
@@ -53,9 +50,8 @@ const MemberList = () => {
     const filtered = members.filter(member => {
       const matchesSearch = searchTerm === '' || 
         member.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        member.mobile?.includes(searchTerm) ||
-        member.membership_number?.toLowerCase().includes(searchTerm.toLowerCase())
+        member.membership_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.zone?.toLowerCase().includes(searchTerm.toLowerCase())
       
       return matchesSearch
     })
@@ -331,35 +327,12 @@ const MemberList = () => {
                       </div>
 
                       <div className="space-y-3">
-                        {member.email && (
-                          <div className="flex items-center space-x-3">
-                            <EnvelopeIcon className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">{member.email}</span>
-                          </div>
-                        )}
-                        
-                        {member.office_tel && (
-                          <div className="flex items-center space-x-3">
-                            <PhoneIcon className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">{member.office_tel?.slice(0, 4) || ''} **** ****</span>
-                          </div>
-                        )}
-                        
                         {member.residence_address && (
                           <div className="flex items-center space-x-3">
                             <MapPinIcon className="w-4 h-4 text-gray-400" />
                             <span className="text-sm text-gray-600">{member.residence_address}</span>
                           </div>
                         )}
-                        
-                        {/* {member.membership_date && (
-                          <div className="flex items-center space-x-3">
-                            <CalendarDaysIcon className="w-4 h-4 text-gray-400" />
-                            <span className="text-sm text-gray-600">
-                              Joined {formatDate(member.membership_date)}
-                            </span>
-                          </div>
-                        )} */}
                       </div>
 
                       {/* <div className="mt-4 pt-4 border-t border-gray-200">

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase/server'
+import { PUBLIC_MEMBER_COLUMNS } from '@/lib/members-public'
 
-// GET all members
+// GET all members (public-safe: no email / phone / office_tel)
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
@@ -11,7 +12,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabaseServer
       .from('members')
-      .select('*')
+      .select(PUBLIC_MEMBER_COLUMNS)
       .order('created_at', { ascending: false })
 
     if (status) {
@@ -35,7 +36,7 @@ export async function GET(request: NextRequest) {
       if (error) throw error
 
       if (!data || data.length === 0) break
-      allRows.push(...data)
+      allRows.push(...(data as Record<string, unknown>[]))
 
       if (data.length < pageSize) break
       from += pageSize

@@ -78,7 +78,7 @@ const MembersPage = () => {
   const fetchMembers = async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/members/list')
+      const res = await fetch('/api/admin/members')
       const { data } = await res.json()
       setMembers(data || [])
     } catch (error) {

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase/server'
+import { stripMemberContactPii } from '@/lib/members-public'
 
-// GET single member
+// GET single member (public-safe: no email / phone / office_tel)
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -24,7 +25,10 @@ export async function GET(
       )
     }
 
-    return NextResponse.json({ data, error: null })
+    return NextResponse.json({
+      data: stripMemberContactPii(data as Record<string, unknown>),
+      error: null,
+    })
   } catch (error) {
     console.error('Error fetching member:', error)
     return NextResponse.json(

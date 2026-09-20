@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabaseServer } from '@/lib/supabase/server'
-import { PUBLIC_MEMBER_COLUMNS } from '@/lib/members-public'
 
-// GET public members list (no email / phone / office_tel)
+// GET full members list for admin (includes email / phone)
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
@@ -12,7 +11,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabaseServer
       .from('members')
-      .select(PUBLIC_MEMBER_COLUMNS)
+      .select('*')
       .order('created_at', { ascending: false })
 
     if (status) {
@@ -44,7 +43,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ data: allRows, error: null })
   } catch (error) {
-    console.error('Error fetching members:', error)
+    console.error('Error fetching admin members:', error)
     return NextResponse.json(
       { data: null, error: error instanceof Error ? error.message : 'Failed to fetch members' },
       { status: 500 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import {
   UserGroupIcon,
   MapPinIcon,
@@ -6,11 +7,7 @@ import {
   StarIcon,
 } from '@heroicons/react/24/outline'
 import { gulshanSocietyCommittees } from '@/lib/data/committee'
-
-// const formatContact = (value: string | string[] | null | undefined) => {
-//   if (!value) return null
-//   return Array.isArray(value) ? value.filter(Boolean).join(', ') : value
-// }
+import { getEc12Photo } from '@/lib/data/ec12-photos'
 
 const isOfficeBearer = (designation: string) => {
   const role = designation.toLowerCase()
@@ -18,6 +15,42 @@ const isOfficeBearer = (designation: string) => {
     role.includes('president') ||
     role.includes('secretary') ||
     role.includes('treasurer')
+  )
+}
+
+const Avatar = ({
+  src,
+  name,
+  size = 'md',
+}: {
+  src: string | null
+  name: string
+  size?: 'md' | 'lg' | 'xl'
+}) => {
+  const box = {
+    md: 'w-16 h-16 sm:w-[72px] sm:h-[72px] text-xl',
+    lg: 'w-20 h-20 sm:w-24 sm:h-24 text-2xl',
+    xl: 'w-28 h-28 sm:w-36 sm:h-36 text-4xl',
+  }[size]
+
+  return (
+    <div
+      className={`relative ${box} rounded-full overflow-hidden bg-primary-100 flex-shrink-0 ring-4 ring-white shadow-md`}
+    >
+      {src ? (
+        <Image
+          src={src}
+          alt={name}
+          fill
+          sizes="144px"
+          className="object-cover object-top"
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center font-bold text-primary">
+          {name.charAt(0)}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -32,13 +65,14 @@ const ExecutiveCommittee = () => {
     (m) => m.designation !== 'President' && isOfficeBearer(m.designation)
   )
   const otherMembers = members.filter((m) => !isOfficeBearer(m.designation))
+  const presidentPhoto = president ? getEc12Photo(president.membership_no) : null
 
   return (
     <div className="min-h-screen bg-white">
       <section className="relative overflow-hidden bg-primary">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(255,255,255,0.12),_transparent_55%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.15),transparent_50%)]" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-28">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-white/15 text-white px-4 py-2 rounded-full text-sm font-medium mb-6 backdrop-blur-sm border border-white/20">
               <ShieldCheckIcon className="w-4 h-4" />
@@ -75,51 +109,35 @@ const ExecutiveCommittee = () => {
       </section>
 
       {president && (
-        <section className="relative -mt-10 pb-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-3xl shadow-2xl border border-primary/15 overflow-hidden">
-              <div className="grid lg:grid-cols-[280px_1fr]">
-                <div className="bg-gradient-to-br from-primary to-primary-800 p-8 flex flex-col items-center justify-center text-center text-white">
-                  <div className="w-28 h-28 rounded-full bg-white/15 border-4 border-white/30 flex items-center justify-center mb-4">
-                    <span className="text-4xl font-bold">
-                      {president.name.charAt(0)}
-                    </span>
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-3">
-                    <StarIcon className="w-3.5 h-3.5" />
+        <section className="relative -mt-8 pb-6">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-2xl shadow-xl border border-primary/15 overflow-hidden">
+              <div className="h-1.5 bg-gradient-to-r from-primary via-primary-600 to-primary-800" />
+              <div className="p-6 sm:p-8 flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-6 text-center sm:text-left">
+                <div className="relative flex-shrink-0">
+                  <div className="absolute -inset-1.5 rounded-full bg-gradient-to-br from-primary to-primary-800 opacity-90" />
+                  <Avatar src={presidentPhoto} name={president.name} size="xl" />
+                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 bg-primary text-white px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-md whitespace-nowrap">
+                    <StarIcon className="w-3 h-3" />
                     President
                   </div>
-                  <p className="text-sm text-white/70">{president.membership_no}</p>
                 </div>
 
-                <div className="p-8 sm:p-10">
-                  <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-2">
+                <div className="flex-1 min-w-0 pt-2 sm:pt-1">
+                  <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-1">
                     Head of the Executive Committee
                   </p>
-                  <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 leading-snug">
                     {president.name}
                   </h2>
+                  <p className="text-xs text-gray-500 mb-3">{president.membership_no}</p>
 
-                  <div className="space-y-3 max-w-2xl">
-                    {president.address && (
-                      <div className="flex items-start gap-3 text-gray-600">
-                        <MapPinIcon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                        <p className="text-base leading-relaxed">{president.address}</p>
-                      </div>
-                    )}
-                    {/* {formatContact(president.mobile) && (
-                      <div className="flex items-start gap-3 text-gray-600">
-                        <PhoneIcon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                        <p className="text-base">{formatContact(president.mobile)}</p>
-                      </div>
-                    )}
-                    {formatContact(president.email) && (
-                      <div className="flex items-start gap-3 text-gray-600">
-                        <EnvelopeIcon className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                        <p className="text-base break-all">{formatContact(president.email)}</p>
-                      </div>
-                    )} */}
-                  </div>
+                  {president.address && (
+                    <div className="flex items-start gap-2 text-gray-600 justify-center sm:justify-start">
+                      <MapPinIcon className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                      <p className="text-sm leading-relaxed">{president.address}</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -128,120 +146,93 @@ const ExecutiveCommittee = () => {
       )}
 
       {officers.length > 0 && (
-        <section className="py-12 bg-gradient-to-b from-primary-50/60 to-white">
+        <section className="py-10 bg-gradient-to-b from-primary-50/50 to-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-6">
               <UserGroupIcon className="w-6 h-6 text-primary" />
               <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
                 Office Bearers
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-              {officers.map((member, index) => (
-                <article
-                  key={`${member.membership_no}-${index}`}
-                  className="group relative bg-white rounded-2xl border border-primary/20 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
-                >
-                  <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary via-primary-600 to-primary-800" />
-                  <div className="p-6 pt-7">
-                    <div className="flex items-start gap-4 mb-5">
-                      <div className="w-16 h-16 rounded-2xl bg-primary text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-primary/25 flex-shrink-0">
-                        {member.name.charAt(0)}
-                      </div>
-                      <div className="min-w-0">
-                        <span className="inline-block mb-2 px-2.5 py-1 rounded-md bg-primary-100 text-primary text-xs font-bold uppercase tracking-wide">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              {officers.map((member, index) => {
+                const photo = getEc12Photo(member.membership_no)
+                return (
+                  <article
+                    key={`${member.membership_no}-${index}`}
+                    className="bg-white rounded-xl border border-primary/15 shadow-sm hover:shadow-md transition-shadow duration-300 p-4 sm:p-5"
+                  >
+                    <div className="flex items-start gap-3.5">
+                      <Avatar src={photo} name={member.name} size="lg" />
+                      <div className="min-w-0 flex-1 pt-0.5">
+                        <span className="inline-block mb-1.5 px-2 py-0.5 rounded bg-primary-100 text-primary text-[11px] font-bold uppercase tracking-wide">
                           {member.designation}
                         </span>
-                        <h4 className="text-lg font-bold text-gray-900 leading-snug">
+                        <h4 className="text-base sm:text-lg font-bold text-gray-900 leading-snug">
                           {member.name}
                         </h4>
                         {member.membership_no && (
-                          <p className="text-xs text-gray-500 mt-1">{member.membership_no}</p>
+                          <p className="text-xs text-gray-500 mt-0.5">{member.membership_no}</p>
                         )}
                       </div>
                     </div>
 
-                    <div className="space-y-2.5 border-t border-gray-100 pt-4">
-                      {member.address && (
-                        <div className="flex items-start gap-2 text-gray-600">
-                          <MapPinIcon className="w-4 h-4 text-primary/70 flex-shrink-0 mt-0.5" />
-                          <p className="text-sm leading-relaxed">{member.address}</p>
-                        </div>
-                      )}
-                      {/* {formatContact(member.mobile) && (
-                        <div className="flex items-start gap-2 text-gray-600">
-                          <PhoneIcon className="w-4 h-4 text-primary/70 flex-shrink-0 mt-0.5" />
-                          <p className="text-sm">{formatContact(member.mobile)}</p>
-                        </div>
-                      )}
-                      {formatContact(member.email) && (
-                        <div className="flex items-start gap-2 text-gray-600">
-                          <EnvelopeIcon className="w-4 h-4 text-primary/70 flex-shrink-0 mt-0.5" />
-                          <p className="text-sm break-all">{formatContact(member.email)}</p>
-                        </div>
-                      )} */}
-                    </div>
-                  </div>
-                </article>
-              ))}
+                    {member.address && (
+                      <div className="flex items-start gap-2 text-gray-600 border-t border-gray-100 mt-3.5 pt-3.5">
+                        <MapPinIcon className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm leading-relaxed">{member.address}</p>
+                      </div>
+                    )}
+                  </article>
+                )
+              })}
             </div>
           </div>
         </section>
       )}
 
       {otherMembers.length > 0 && (
-        <section className="py-14 bg-white">
+        <section className="py-10 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
-              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            <div className="mb-6">
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
                 Executive Members &amp; Zonal Chairmen
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm sm:text-base">
                 Representing the society across Gulshan&apos;s six zones.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {otherMembers.map((member, index) => (
-                <article
-                  key={`${member.membership_no}-${index}`}
-                  className="bg-gray-50 hover:bg-white rounded-2xl border border-gray-200 hover:border-primary/30 p-5 transition-all duration-300 hover:shadow-lg"
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-primary-100 text-primary flex items-center justify-center font-bold flex-shrink-0">
-                      {member.name.charAt(0)}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {otherMembers.map((member, index) => {
+                const photo = getEc12Photo(member.membership_no)
+                return (
+                  <article
+                    key={`${member.membership_no}-${index}`}
+                    className="bg-gray-50 hover:bg-white rounded-xl border border-gray-200 hover:border-primary/25 p-4 transition-all duration-300 hover:shadow-md"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <Avatar src={photo} name={member.name} size="md" />
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-semibold text-primary uppercase tracking-wide mb-0.5">
+                          {member.designation}
+                        </p>
+                        <h4 className="font-bold text-gray-900 leading-snug text-sm sm:text-base">
+                          {member.name}
+                        </h4>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-0.5">
-                        {member.designation}
-                      </p>
-                      <h4 className="font-bold text-gray-900 leading-snug">
-                        {member.name}
-                      </h4>
-                    </div>
-                  </div>
 
-                  {member.address && (
-                    <div className="flex items-start gap-2 text-gray-600 mb-2">
-                      <MapPinIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
-                      <p className="text-sm leading-relaxed">{member.address}</p>
-                    </div>
-                  )}
-                  {/* {formatContact(member.mobile) && (
-                    <div className="flex items-start gap-2 text-gray-600 mb-2">
-                      <PhoneIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
-                      <p className="text-sm">{formatContact(member.mobile)}</p>
-                    </div>
-                  )}
-                  {formatContact(member.email) && (
-                    <div className="flex items-start gap-2 text-gray-600">
-                      <EnvelopeIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
-                      <p className="text-sm break-all">{formatContact(member.email)}</p>
-                    </div>
-                  )} */}
-                </article>
-              ))}
+                    {member.address && (
+                      <div className="flex items-start gap-2 text-gray-600">
+                        <MapPinIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
+                        <p className="text-sm leading-relaxed line-clamp-2">{member.address}</p>
+                      </div>
+                    )}
+                  </article>
+                )
+              })}
             </div>
           </div>
         </section>

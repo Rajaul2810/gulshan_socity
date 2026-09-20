@@ -1,30 +1,55 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
-import { 
-  ArrowRightIcon, 
-  HeartIcon, 
-  UsersIcon, 
+import {
+  ArrowRightIcon,
+  HeartIcon,
   HandRaisedIcon,
   SparklesIcon,
-  CheckCircleIcon
+  CheckCircleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from '@heroicons/react/24/outline'
 
+const HERO_SLIDES = [
+  { src: '/heroSlider/12thEC.jpg', alt: '12th Executive Committee' },
+  { src: '/heroSlider/AM10.JPG', alt: 'Gulshan Society community' },
+  { src: '/heroSlider/APH06023.jpg', alt: 'Society event' },
+  { src: '/heroSlider/ID3.jpg', alt: 'Community gathering' },
+]
+
 const Hero = () => {
+  const [activeSlide, setActiveSlide] = useState(0)
+
   const stats = [
     { number: '2974+', label: 'Active Members' },
     { number: '50+', label: 'Community Events' },
     { number: '24+', label: 'Years of Service' },
-    { number: '100%', label: 'Community Focus' }
+    { number: '100%', label: 'Community Focus' },
   ]
 
   const features = [
     'Community Support Programs',
     'Educational Resources',
     'Health & Wellness Initiatives',
-    'Cultural Events & Celebrations'
+    'Cultural Events & Celebrations',
   ]
+
+  const goTo = useCallback((index: number) => {
+    setActiveSlide((index + HERO_SLIDES.length) % HERO_SLIDES.length)
+  }, [])
+
+  const next = useCallback(() => goTo(activeSlide + 1), [activeSlide, goTo])
+  const prev = useCallback(() => goTo(activeSlide - 1), [activeSlide, goTo])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((current) => (current + 1) % HERO_SLIDES.length)
+    }, 4500)
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <section className="relative h-full flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50 via-white to-primary-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -115,41 +140,75 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Column - Visual Elements */}
+          {/* Right Column - Image Slider */}
           <div className="relative">
-            {/* Main Card */}
-            <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 transform rotate-0 hover:rotate-2 transition-transform duration-500">
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
-                <HeartIcon className="w-12 h-12 text-white" />
-              </div>
-              
-              <div className="space-y-4">
-                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                  Community Impact
-                </h3>
-                
-                <div className="grid grid-cols-2 gap-3">
-                  {stats.slice(0, 4).map((stat, index) => (
-                    <div key={index} className="text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                      <div className="text-xl font-bold text-primary dark:text-primary-400">
-                        {stat.number}
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">
-                        {stat.label}
-                      </div>
-                    </div>
-                  ))}
+            <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-2.5 sm:p-3 overflow-hidden">
+              <div className="relative aspect-[4/3] sm:aspect-[5/4] rounded-xl overflow-hidden bg-primary-100 dark:bg-gray-700 group">
+                {HERO_SLIDES.map((slide, index) => (
+                  <div
+                    key={slide.src}
+                    className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                      index === activeSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                    }`}
+                  >
+                    <Image
+                      src={slide.src}
+                      alt={slide.alt}
+                      fill
+                      priority={index === 0}
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-contain"
+                    />
+                  </div>
+                ))}
+
+                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+
+                <div className="absolute bottom-3 left-3 right-3 z-30 flex items-end justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-white text-sm sm:text-base font-semibold drop-shadow-md truncate">
+                      {HERO_SLIDES[activeSlide].alt}
+                    </p>
+                    <p className="text-white/80 text-xs mt-0.5">Est. 2002 · Gulshan Society</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    {HERO_SLIDES.map((_, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        aria-label={`Go to slide ${index + 1}`}
+                        onClick={() => goTo(index)}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          index === activeSlide
+                            ? 'w-5 bg-white'
+                            : 'w-1.5 bg-white/50 hover:bg-white/80'
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-300">
-                  <UsersIcon className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-medium">Gulshan Society was established in 2002</span>
-                </div>
+                <button
+                  type="button"
+                  aria-label="Previous slide"
+                  onClick={prev}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/90 dark:bg-gray-900/80 text-gray-800 dark:text-white shadow-md flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 transition-opacity duration-300 hover:bg-white"
+                >
+                  <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Next slide"
+                  onClick={next}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/90 dark:bg-gray-900/80 text-gray-800 dark:text-white shadow-md flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 transition-opacity duration-300 hover:bg-white"
+                >
+                  <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
               </div>
             </div>
 
             {/* Floating Cards */}
-            <div className="absolute -bottom-6 -left-6 bg-primary text-white p-3 rounded-xl shadow-lg transform -rotate-6 hover:rotate-0 transition-transform duration-300">
+            <div className="absolute -bottom-6 -left-6 bg-primary text-white p-3 rounded-xl shadow-lg transform -rotate-6 hover:rotate-0 transition-transform duration-300 z-20">
               <div className="flex items-center space-x-2">
                 <HandRaisedIcon className="w-5 h-5" />
                 <div>
@@ -159,7 +218,7 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="absolute -top-6 -right-6 bg-primary text-white p-3 rounded-xl shadow-lg transform rotate-6 hover:rotate-0 transition-transform duration-300">
+            <div className="absolute -top-6 -right-6 bg-primary text-white p-3 rounded-xl shadow-lg transform rotate-6 hover:rotate-0 transition-transform duration-300 z-20">
               <div className="flex items-center space-x-2">
                 <HeartIcon className="w-5 h-5" />
                 <div>

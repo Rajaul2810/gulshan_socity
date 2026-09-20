@@ -9,8 +9,6 @@ export interface Member {
   zone?: string
   name: string
   name_bangla?: string
-  email?: string
-  mobile?: string
   residence_address?: string
   property_schedule?: string
   membership_date: string
@@ -18,7 +16,6 @@ export interface Member {
   photo_url?: string
   created_at?: string
   updated_at?: string
-  office_tel?: string
 }
 
 export const useMembers = (filters?: {
